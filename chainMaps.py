@@ -4,6 +4,7 @@ import monomial
 import polynomial
 import copy
 import coefficient
+import time
 
 def barMap(tens):#for now assume this is above position 2, so the result is also a tensor
     ten = copy.deepcopy(tens)
@@ -50,7 +51,7 @@ def k2(tens):
             b2 = copy.deepcopy(ten.monos[2])
             b2.vs = [i[1]] + b2.vs
             b3  = copy.deepcopy(ten.monos[2])
-            b3.vs = [ten.monos[1][i][1]] + b2.vs
+            b3.vs = [ten.monos[1][i][1]] + b3.vs
             #######c's
             c = copy.deepcopy(ten.monos[0])
             c.vs = [i[1]]
@@ -79,7 +80,7 @@ def k2(tens):
                 ret = ret + k2(i)
             ret.sort()
     return ret
-    
+
     
     
     
@@ -127,5 +128,84 @@ def m1(tens):
         
         
         
-        
+###########################################################################################################################################################
+############################################################## EXPERIMENTS #############################################################################################
+###########################################################################################################################################################
+
+
+
+def facMap(tens):
+    assert isinstance(tens,pureTensor.pureTensor) or isinstance(tens,tensor.tensor)
+    ten = copy.deepcopy(tens)
+    ret = copy.deepcopy(tens)
+   
+    if isinstance(ten,tensor.tensor):
+        flag = True
+        for i in ten.ps:
+            if flag:
+                ret = facMap(i)
+                flag = False
+            else:
+                ret = ret + facMap(i)
+            
+    if isinstance(ten,pureTensor.pureTensor):
+        assert tens.degree() == 4
+        if not ten.monos[0].isNum():
+            a = copy.deepcopy(ten.monos[0])
+            ten.monos[0].vs = []
+            return a * facMap(ten)
+        elif not ten.monos[3].isNum():
+            b = copy.deepcopy(ten.monos[3])
+            ten.monos[3].vs = []
+            return facMap(ten) * b
+        else:
+            x = tens.monos[1] * tens.monos[2]
+            ret = tensor.tensor([])
+            flag = True
+            for i in x.facSeq():
+                m = i[0]
+                j = i[1]
+                r = i[2]
+                a = copy.deepcopy(m)
+                a.vs = a.vs[:j]
+                b = copy.deepcopy(m)
+                b.vs = b.vs[j+2:]
+                if flag:
+                    ret = tensor.tensor([pureTensor.pureTensor([a,r,b])])
+                    flag = False
+                else:
+                    ret = ret + pureTensor.pureTensor([a,r,b])
+                
+    ret.sort()
+    return ret
+            
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
