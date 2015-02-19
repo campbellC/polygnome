@@ -52,7 +52,7 @@ class monomial:
         ret.sort()
         return ret.vs
         
-    def facSeq(self):#this will be a factorisation sequence which will return a  [[monomial-repr, position using r, i.e. the left hand position! , r used as a one key dict]]
+    def facSeq(self):#this will be a factorisation sequence which will return a  [[monomial-repr, position using r i.e. the left hand position! , r used as a one key dict]]
         self.sanityCheck()
         ret = []
         mon = copy.deepcopy(self)
