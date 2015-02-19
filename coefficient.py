@@ -7,7 +7,17 @@ class coefficient():
         self.coeffs = copy.deepcopy(coeffs)
         self.sanityCheck()
     
-    
+    def sort(self): #WARNING - assumes length one variables in the base ring!
+        newCoeffs = {}
+        for key in self.coeffs:
+            newkey = ''.join(sorted(key))
+            if newkey in newCoeffs:
+                newCoeffs[newkey] += self.coeffs[key]
+            else:
+                newCoeffs[newkey] = self.coeffs[key]
+        self.coeffs = newCoeffs
+        self.sanityCheck()
+            
     
     def isZero(self):
         for i in self.coeffs:
