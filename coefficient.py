@@ -47,17 +47,18 @@ class coefficient():
         if self.isZero():
             ret = "0"
         else:
-            flag = False
+            bracketFlag = False
             if len(self.coeffs) == 1:
-                flag = True
+                bracketFlag = True
                 ret = ""
             else:
                 ret = "("
             ret += "+".join(str(self.coeffs[i])+i if (self.coeffs[i]!=1 and self.coeffs[i]!=0 and self.coeffs[i]!=-1)
-                                                    else i if self.coeffs[i] == 1
+                                                    else i if (self.coeffs[i] == 1 and i != "")
+                                                    else str(1) if self.coeffs[i] == 1
                                                     else "-"+i if self.coeffs[i]==-1
                                                     else "0" for i in self.coeffs)
-            if not flag:
+            if not bracketFlag:
                 ret += ")"
         return ret
     
