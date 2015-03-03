@@ -74,14 +74,12 @@ for i in range(16):
     if i % 4 == 0:
         j = j + 1
     genericVectFirstPosition[j] = genericVectFirstPosition[j] + variables[i % 4]
-#   vectToLatex(k1(genericVectFirstPosition))
-    for i in k1(genericVectFirstPosition)[1].monos:
-        print i,i.coeff.coeffs
+    vectToLatex(k1(genericVectFirstPosition))
     n = n+ 1 
-#   if n % 4 == 0:
-#        print '\\) \n\n \\('
+    if n % 4 == 0:
+         print '\\) \n\n \\('
 
-#print '\)'
+print '\)'
 print 'From here are the images of k2\n \('
 n = 0
 for i in range(6):
@@ -89,7 +87,7 @@ for i in range(6):
         for k in range(j,4):
             genericVectFirstPosition = [zero,zero,zero,zero,zero,zero]
             genericVectFirstPosition[j] = genericVectFirstPosition[j] + variables[j] * variables[k]
-#           vectToLatex(k2(genericVectFirstPosition))
+            vectToLatex(k2(genericVectFirstPosition))
         
-#        print '\\)\n \n \\('
-#print '\)'
+         print '\\)\n \n \\('
+print '\)'
