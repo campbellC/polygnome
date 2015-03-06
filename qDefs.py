@@ -66,28 +66,29 @@ def k2(vect):
     return answer
 
 
-print 'From here are the images of k1\n \('
-j = -1
-n = 0
-for i in range(16):
-    genericVectFirstPosition = [zero,zero,zero,zero]
-    if i % 4 == 0:
-        j = j + 1
-    genericVectFirstPosition[j] = genericVectFirstPosition[j] + variables[i % 4]
-    vectToLatex(k1(genericVectFirstPosition))
-    n = n+ 1 
-    if n % 4 == 0:
-         print '\\) \n\n \\('
-
-print '\)'
+# print 'From here are the images of k1\n \('
+# j = -1
+# n = 0
+# for i in range(16):
+#     genericVectFirstPosition = [zero,zero,zero,zero]
+#     if i % 4 == 0:
+#         j = j + 1
+#     genericVectFirstPosition[j] = genericVectFirstPosition[j] + variables[i % 4]
+#     vectToLatex(k1(genericVectFirstPosition))
+#     n = n+ 1 
+#     if n % 4 == 0:
+#          print '\\) \n\n \\('
+# 
+# print '\)'
 print 'From here are the images of k2\n \('
 n = 0
 for i in range(6):
     for j in range(4):
         for k in range(j,4):
+            n = n + 1
             genericVectFirstPosition = [zero,zero,zero,zero,zero,zero]
-            genericVectFirstPosition[j] = genericVectFirstPosition[j] + variables[j] * variables[k]
+            genericVectFirstPosition[i] = genericVectFirstPosition[i] + variables[j] * variables[k]
             vectToLatex(k2(genericVectFirstPosition))
-        
-         print '\\)\n \n \\('
+            if n % 5 == 0:
+                 print '\\)\n \n \\('
 print '\)'
