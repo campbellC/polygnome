@@ -1,3 +1,4 @@
+from prettyTyping import *
 from monomial import *
 from coefficient import *
 c = coefficient()
@@ -41,12 +42,6 @@ for inum,i in enumerate(letterCoeffs):  #this for loop builds a generic function
 
 # Now to write the map from such a function to K2. That is, it takes a vector of size four and returns a vector
 # of size six, each one being what it does to that relation
-def vectToLatex(vect):
-    print '\\left( \\begin{array}{c}'
-    for i in vect:
-        print i, '\\\\'
-    print '\\end{array} \\right)'
-
 def k1(vect):
     assert len(vect) == 4
     answer = [zero,zero,zero,zero,zero,zero]
@@ -81,14 +76,11 @@ def k2(vect):
 # 
 # print '\)'
 print 'From here are the images of k2\n \('
-n = 0
+tempVec = []
 for i in range(6):
     for j in range(4):
         for k in range(j,4):
-            n = n + 1
             genericVectFirstPosition = [zero,zero,zero,zero,zero,zero]
             genericVectFirstPosition[i] = genericVectFirstPosition[i] + variables[j] * variables[k]
-            vectToLatex(k2(genericVectFirstPosition))
-            if n % 5 == 0:
-                 print '\\)\n \n \\('
-print '\)'
+            tempVec.append(k2(genericVectFirstPosition))
+listOfVectsToLatex(tempVec)
