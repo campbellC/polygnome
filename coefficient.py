@@ -15,6 +15,9 @@ class coefficient():
                 newCoeffs[newkey] += self.coeffs[key]
             else:
                 newCoeffs[newkey] = self.coeffs[key]
+        newCoeffs = {key : value for key, value in newCoeffs.items() if value != 0}
+        if newCoeffs == {}:
+            newCoeffs = {'':0}
         self.coeffs = newCoeffs
         self.sanityCheck()
             
@@ -72,6 +75,7 @@ class coefficient():
                     ret.coeffs[i] = self.coeffs[i]+other.coeffs[i]
                 else:
                     ret.coeffs[i]=other.coeffs[i]
+            ret.sort()
             return ret
                 
     def times(self,other):

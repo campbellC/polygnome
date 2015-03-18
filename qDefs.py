@@ -75,12 +75,19 @@ def k2(vect):
 #          print '\\) \n\n \\('
 # 
 # print '\)'
-print 'From here are the images of k2\n \('
-tempVec = []
-for i in range(6):
-    for j in range(4):
-        for k in range(j,4):
-            genericVectFirstPosition = [zero,zero,zero,zero,zero,zero]
-            genericVectFirstPosition[i] = genericVectFirstPosition[i] + variables[j] * variables[k]
-            tempVec.append(k2(genericVectFirstPosition))
-listOfVectsToLatex(tempVec)
+#print 'From here are the images of k2\n \('
+#tempVec = []
+#for i in range(6):
+    #for j in range(4):
+        #for k in range(j,4):
+            #genericVectFirstPosition = [zero,zero,zero,zero,zero,zero]
+            #genericVectFirstPosition[i] = genericVectFirstPosition[i] + variables[j] * variables[k]
+            #tempVec.append(k2(genericVectFirstPosition))
+#listOfVectsToLatex(tempVec)
+vectA = [x1*x3,x2*x4*q,x2*x3,x2*x3,x1*x4*(-1)*q,zero]
+vectF0 = [zero,zero,zero,x2*x3,zero,x1*x4*(-1)]
+vectF1 = [zero,zero,zero,x1*x4*q,zero,x3*x4*(-1)*q]
+vects = [vectA, vectF0, vectF1]
+for inum,i in enumerate(vects):
+    vects[inum] = k2(i)
+listOfVectsToLatex(vects)
