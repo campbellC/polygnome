@@ -17,5 +17,6 @@ def listOfVectsToLatex(lst, numPerLine = 5): #this prints out numPerLine vectors
     for inum, i in enumerate(lst):
         vectToLatex(i)
         if inum % 5 == 4:
-            print '\\) \n \n \\(' if not (inum == len(lst) - 1) else ''
+            if not (inum == len(lst) -1):
+                print '\\) \n \n \\('
     print '\\)'
