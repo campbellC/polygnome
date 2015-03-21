@@ -108,8 +108,4 @@ class polynomial:
         assert isinstance(self.monos,list)
         for i in self.monos:
             assert isinstance(i,monomial.monomial)
-def main():
-    print "ello ello ello"
     
-if __name__ == '__main__':
-    main()
