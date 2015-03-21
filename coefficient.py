@@ -1,16 +1,31 @@
 import copy
-
+import re
 
 class coefficient():
     """coefficient of monomial or pure tensor"""
     def __init__(self,coeffs = {"" : 1}):
         self.coeffs = copy.deepcopy(coeffs)
         self.sanityCheck()
-    
-    def sort(self): #WARNING - assumes length one variables in the base ring!
+
+
+    def sort(self):
         newCoeffs = {}
+        
+        #WARNING - assumes length one variables in the base ring or length one plus number, like a1 b2 x9!
+        def sortVars(variables):#this helper function sorts variables by splitting into an array using the varRE regex and then sorting the array and joining it all up again
+            assert isinstance(variables, str)
+            if variables == "":
+                return ""
+            arr = []
+            while variables != "":
+                m = re.match(r"([a-zA-Z][\d]*)+",variables)
+                arr.append(m.group(1))
+                variables = variables[:-len(m.group(1))]
+            variables = "".join(sorted(arr))
+            return variables
+
         for key in self.coeffs:
-            newkey = ''.join(sorted(key))
+            newkey = sortVars(key)
             if newkey in newCoeffs:
                 newCoeffs[newkey] += self.coeffs[key]
             else:
