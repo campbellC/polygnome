@@ -6,7 +6,11 @@ class coefficient():
     def __init__(self,coeffs = {"" : 1}):
         self.coeffs = copy.deepcopy(coeffs)
         self.sanityCheck()
-
+    
+    @classmethod
+    def fromNumber(cls,num):
+        coeffs = {"" : num}
+        return cls(num)
 
     def sort(self):
         newCoeffs = {}
@@ -74,7 +78,7 @@ class coefficient():
             ret += "+".join(str(self.coeffs[i])+i if (self.coeffs[i]!=1 and self.coeffs[i]!=0 and self.coeffs[i]!=-1)
                                                     else i if (self.coeffs[i] == 1 and i != "")
                                                     else str(1) if self.coeffs[i] == 1
-                                                    else "-"+i if self.coeffs[i]==-1
+                                                    else "-"+i if self.coeffs[i] == -1
                                                     else "0" for i in self.coeffs)
             if not bracketFlag:
                 ret += ")"
