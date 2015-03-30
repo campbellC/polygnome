@@ -16,6 +16,18 @@ def listOfVectsToLatex(lst, numPerLine = 5): #this prints out numPerLine vectors
     print '\\( '
     for inum, i in enumerate(lst):
         vectToLatex(i)
-        if inum % 5 == 4:
-            print '\\) \n \n \\(' if not (inum == len(lst) - 1) else ''
+        if inum % numPerLine == numPerLine - 1:
+            if not (inum == len(lst) -1):
+                print '\\) \n \n \\('
     print '\\)'
+def latexOpen():
+    print "\\documentclass[11pt, oneside]{article}   	% use \"amsart\" instead of \"article\" for AMSLaTeX format"
+    print "\\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots."
+    print "\\geometry{a4paper}                   		% ... or a4paper or a5paper or ... "
+    print "%\\geometry{landscape}                		% Activate for for rotated page geometry"
+    print "%\\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent"
+    print "\\usepackage{MyThesis}"
+    print "\\begin{document}"
+def latexClose():
+    print "\\end{document}"
+
