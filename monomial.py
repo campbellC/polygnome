@@ -12,6 +12,7 @@ class monomial:
         self.rels = copy.deepcopy(rels)
         self.coeff = copy.deepcopy(coeff)
         self.vs = copy.deepcopy(vs)
+        self.coeffsFlag = len(rels.values()[0]) == 3 # this flag lets you know that you are using coefficients of not.
         self.sanityCheck()
     
     def degree(self):
@@ -41,10 +42,15 @@ class monomial:
             return
         for i in range(0,len(self.vs)-1):
             if tuple(self.vs[i:i+2]) in self.rels:
-                pbwTerm = self.rels[tuple(self.vs[i:i+2])]
-                self.vs[i:i+2] = pbwTerm[:2]
-                self.coeff = self.coeff * pbwTerm[2]
-                break
+                if self.coeffsFlag:
+                    pbwTerm = self.rels[tuple(self.vs[i:i+2])]
+                    self.vs[i:i+2] = pbwTerm[:2]
+                    self.coeff = self.coeff * pbwTerm[2]
+                    break
+                else:
+                    self.vs[i:i+2] = self.rels[tuple(self.vs[i:i+2])]
+                    break
+
         self.sanityCheck()
         self.sort()
             
@@ -55,6 +61,7 @@ class monomial:
         return ret.vs
         
     def facSeq(self):#this will be a factorisation sequence which will return a  [[monomial-repr, position using r i.e. the left hand position! , r used as a one key dict]]
+        assert !self.coeffFlags #TODO: make this work without this assertion
         self.sanityCheck()
         ret = []
         mon = copy.deepcopy(self)
