@@ -34,7 +34,7 @@ one = mono()
 def k1(vect): 
     """This map takes a vector of 4 elements of A and returns a vector of six elements of A i.e. how it acts on the four basis vectors of K_1 and returns how it acts on the six basis vectors of K_2, the 4 vector takes x1 to the first, x2 to the second etc"""
     vect = ["placeholder"] + vect #this means that x[1] is what vect sends x1 to, x[2] is what vect sends x[2] to etc.
-    return [ x3*vect[1] - x1* vect[3] + vect[3] * x1 - vect[1] * x3, \
+    return [  x3*vect[1] - x1* vect[3] + vect[3] * x1 - vect[1] * x3, \
               x4*vect[2] - x2* vect[4] + vect[4] * x2 - vect[2] * x4, \
               x4*vect[1] - x2* vect[3] + vect[4] * x1 - vect[2] * x3, \
               x1*vect[2] - x2* vect[3] + vect[1] * x2 - vect[2] * x3, \
@@ -48,7 +48,7 @@ def k2(vect):
     vect = ["placeholder"] + vect #this means that vect[1] is what vect sends r1 to
     return [ x3 * vect[4] + x1 * vect[6] - x1 * vect[5] - vect[1]*x2 + vect[5] * x3,\
              x4 * vect[1] - x1 * vect[3] - vect[6] * x1 - vect[4]*x3 + vect[3] * x3,\
-             x4 * vect[5] - x1 * vect[2] - vect[6] * x2  - vect[4]*x4 + vect[6] * x4,\
+             x4 * vect[5] - x1 * vect[2] - vect[6] * x2  - vect[4]*x4 + vect[3] * x4,\
              x4 * vect[4] + x2 * vect[6] - x2 * vect[5] - vect[3]*x2 + vect[2] * x3]
 
 def k3(vect):

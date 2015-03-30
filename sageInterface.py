@@ -122,10 +122,23 @@ def KnToVectSplitUp(vect,n,degree):#This function requires you to state the degr
                 continue
             answer.append(monoToVect(i,inum))
     return answer
+def vectOfNumsSplitUpToVect(vect,dimension): #TODO: modify this function to convert to symbolic vectors as well as number vectors
+    answer = [0] * dimension
+    for i in vect:
+        assert i[0].isNum()
+        component = None;
+        for jnum,j in enumerate(i[1]):
+            if j != 0:
+                component = jnum
+                break
+        answer[component] += i[0].coeffs[""]
+    return answer
 
 def vectSplitUpToKn(vect,n,degree):
-    vectOfMonos = [zero] * nCr(4,n)
-    totalDimension = nCr(4,n) * nCr(3+degree,3)
+    monoDimension = nCr(3+degree,3)
+    rankOfKn = nCr(4,n)
+    vectOfMonos = [zero] * rankOfKn 
+    totalDimension = monoDimension * rankOfKn
     for i in vect:
         assert isinstance(i[0],coefficient) and len(i[1]) == totalDimension
         mCoeff = i[0]
@@ -136,8 +149,19 @@ def vectSplitUpToKn(vect,n,degree):
             if i[1][inum] == 1:
                 position = inum
                 break
-        component = position // 20
-        monoNum = position % 20
+        component = position // monoDimension
+        monoNum = position % monoDimension 
         vectOfMonos[component] = vectOfMonos[component] + numberToMono(monoNum,degree) * mCoeff
     return vectOfMonos
+def vectToVectSplitUp(vect):
+    dimension = len(vect)
+    answer = []
+    for inum,i in enumerate(vect):
+        if i != 0:
+            mCoeff = coefficient.fromNumber(i)
+            mVect = [0] * dimension
+            mVect[inum] = 1
+            answer.append( (mCoeff,mVect))
+    return answer
 
+        
