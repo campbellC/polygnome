@@ -3,7 +3,7 @@ import coefficient
 import copy
 import tensor
 import pureTensor
-
+##changes to be made: rels will now be a dictionary with [a,b]: [c,d,coeff].
 class monomial:
     """A monomial is just a list of variables with a coefficient"""
     
@@ -12,6 +12,7 @@ class monomial:
         self.rels = copy.deepcopy(rels)
         self.coeff = copy.deepcopy(coeff)
         self.vs = copy.deepcopy(vs)
+        self.coeffsFlag = len(rels.values()[0]) == 3 # this flag lets you know that you are using coefficients of not.
         self.sanityCheck()
     
     def degree(self):
@@ -41,8 +42,15 @@ class monomial:
             return
         for i in range(0,len(self.vs)-1):
             if tuple(self.vs[i:i+2]) in self.rels:
-                self.vs[i:i+2] = self.rels[tuple(self.vs[i:i+2])]
-                break
+                if self.coeffsFlag:
+                    pbwTerm = self.rels[tuple(self.vs[i:i+2])]
+                    self.vs[i:i+2] = pbwTerm[:2]
+                    self.coeff = self.coeff * pbwTerm[2]
+                    break
+                else:
+                    self.vs[i:i+2] = self.rels[tuple(self.vs[i:i+2])]
+                    break
+
         self.sanityCheck()
         self.sort()
             
@@ -53,6 +61,7 @@ class monomial:
         return ret.vs
         
     def facSeq(self):#this will be a factorisation sequence which will return a  [[monomial-repr, position using r i.e. the left hand position! , r used as a one key dict]]
+        assert !self.coeffFlags #TODO: make this work without this assertion
         self.sanityCheck()
         ret = []
         mon = copy.deepcopy(self)
@@ -62,7 +71,7 @@ class monomial:
         for i in range(0,len(mon.vs)-1):
             if tuple(mon.vs[i:i+2]) in mon.rels:
                 t = copy.deepcopy(mon)
-                t.vs[i:i+2] = mon.rels[tuple(mon.vs[i:i+2])]
+                t.vs[i:i+2] = mon.rels[tuple(mon.vs[i:i+2])][:2]
                 return [[mon,i,{tuple(mon.vs[i:i+2]):mon.rels[tuple(mon.vs[i:i+2])]}]] + t.facSeq() 
     
                 
@@ -149,7 +158,7 @@ class monomial:
         
         for i in self.rels.values():
             assert isinstance(i,list)
-            for j in i:
+            for j in i[:2]:
                 assert j in self.symbs
         #######################
         assert isinstance(self.coeff,coefficient.coefficient)
