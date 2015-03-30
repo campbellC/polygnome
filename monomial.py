@@ -61,7 +61,7 @@ class monomial:
         return ret.vs
         
     def facSeq(self):#this will be a factorisation sequence which will return a  [[monomial-repr, position using r i.e. the left hand position! , r used as a one key dict]]
-        assert !self.coeffFlags #TODO: make this work without this assertion
+        assert not self.coeffFlags #TODO: make this work without this assertion
         self.sanityCheck()
         ret = []
         mon = copy.deepcopy(self)
