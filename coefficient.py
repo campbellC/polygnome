@@ -10,7 +10,7 @@ class coefficient():
     @classmethod
     def fromNumber(cls,num):
         coeffs = {"" : num}
-        return cls(num)
+        return cls(coeffs)
 
     def sort(self):
         newCoeffs = {}
@@ -40,7 +40,13 @@ class coefficient():
         self.coeffs = newCoeffs
         self.sanityCheck()
             
-    
+    def isNum(self):
+        for i in self.coeffs:
+            if i != "":
+                if self.coeffs[i] != 0:
+                    return False
+        return True
+
     def isZero(self):
         for i in self.coeffs:
             if self.coeffs[i] !=0:
