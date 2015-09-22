@@ -11,12 +11,12 @@ from gerstenhaberBracket import GerstenhaberBracket, interpretVectorAsFunctionOn
 c = coefficient()
 
 symbs = ["x1", "x2","x3","x4"]
-rels = { ("x3" ,"x1") : ["x1", "x3",c],\
-    ("x4", "x2") : ["x2", "x4",c],\
-    ("x4", "x1") : ["x2", "x3",c],\
-    ("x1", "x2") : ["x2", "x3",c],\
-    ("x3", "x2") : ["x1", "x4",c],\
-    ("x4", "x3") : ["x1", "x4",c]}
+rels = { ("x3" ,"x1") : ["x1", "x3"],\
+    ("x4", "x2") : ["x2", "x4"],\
+    ("x4", "x1") : ["x2", "x3"],\
+    ("x1", "x2") : ["x2", "x3"],\
+    ("x3", "x2") : ["x1", "x4"],\
+    ("x4", "x3") : ["x1", "x4"]}
 r = {1: {("x3" ,"x1") : ["x1", "x3"]},\
     2: {("x4", "x2") : ["x2", "x4"]},\
     3: {("x4", "x1") : ["x2", "x3"]},\
@@ -117,51 +117,22 @@ for fun in basisHH2temp:
 #
 
 
-#geometricInfinitesimals = [mono(["x3","x3"],coefficient({"f":1}))-mono(["x1","x1"],coefficient({"e":1}))
-#                            -mono(["x1","x3"],coefficient({"d":1}))*2, 
-#                            mono(["x4","x4"],coefficient({"f":1}))-mono(["x2","x2"],coefficient({"e":1}))
-#                            -mono(["x2","x4"],coefficient({"d":1}))*2,
-#                             mono(["x1","x4"],coefficient({"f":1}))-mono(["x2","x1"],coefficient({"e":1}))
-#                            -mono(["x2","x3"],coefficient({"d":1}))*2,
-#                            mono(["x1","x4"],coefficient({"f":1}))-mono(["x2","x1"],coefficient({"e":1}))
-#                            -mono(["x2","x3"],coefficient({"d":1}))*2 
-#                            +mono(["x1","x1"],coefficient({"b":1}))
-#                            #mono(["x2","x3"],coefficient({"a":1}))*2
-#                            -mono(["x2","x4"],coefficient({"c":1})),
-#                            mono(["x3","x4"],coefficient({"f":1}))-mono(["x2","x3"],coefficient({"e":1}))
-#                            -mono(["x1","x4"],coefficient({"d":1}))*2,
-#                            mono(["x1","x3"],coefficient({"b":1}))*(-1)
-#                            #mono(["x1","x4"],coefficient({"a":1}))*(-2)
-#                            +mono(["x4","x4"],coefficient({"c":1}))]
-#
-#for i in geometricInfinitesimals:
-#    print i
-#  
-#
-#tempvec = []
-#m2f = m2(interpretVectorAsFunctionOnK2(geometricInfinitesimals))
-#g = GerstenhaberBracket(m2f,m2f)
-#print "g-bracket done"
-#for doublyDefined in basisK3:
-#
-#    doublyDefined= copy.deepcopy(doublyDefined)
-#    
-#    tempvec.append(g(doublyDefined))
-#    print "one calculation done", doublyDefined
-#for i in tempvec:
-#    for m in i.monos:
-#        m.coeff.sort()
-#    i.sort()
-#    print i
-#    
-    #################TEMP CODE STARTS #######################
-    geometricInfinitesimals = [mono(["x1","x1"],coefficient({"e":1}))*(-1),
-                            mono(["x2","x2"],coefficient({"e":1}))*(-1),
-                            zero,
-                            mono(["x2","x1"],coefficient({"e":1}))*(-1)
-                            +mono(["x1","x1"],coefficient({"b":1})),
-                            mono(["x2","x3"],coefficient({"e":1}))*(-2),
-                            mono(["x1","x3"],coefficient({"b":1}))*(-1)]
+geometricInfinitesimals = [mono(["x3","x3"],coefficient({"f":1}))-mono(["x1","x1"],coefficient({"e":1}))
+                            -mono(["x1","x3"],coefficient({"d":1}))*2, 
+                            mono(["x4","x4"],coefficient({"f":1}))-mono(["x2","x2"],coefficient({"e":1}))
+                            -mono(["x2","x4"],coefficient({"d":1}))*2,
+                             mono(["x1","x4"],coefficient({"f":1}))-mono(["x2","x1"],coefficient({"e":1}))
+                            -mono(["x2","x3"],coefficient({"d":1}))*2,
+                            mono(["x1","x4"],coefficient({"f":1}))-mono(["x2","x1"],coefficient({"e":1}))
+                            -mono(["x2","x3"],coefficient({"d":1}))*2 
+                            +mono(["x1","x1"],coefficient({"b":1}))
+                            #mono(["x2","x3"],coefficient({"a":1}))*2
+                            -mono(["x2","x4"],coefficient({"c":1})),
+                            mono(["x3","x4"],coefficient({"f":1}))-mono(["x2","x3"],coefficient({"e":1}))
+                            -mono(["x1","x4"],coefficient({"d":1}))*2,
+                            mono(["x1","x3"],coefficient({"b":1}))*(-1)
+                            #mono(["x1","x4"],coefficient({"a":1}))*(-2)
+                            +mono(["x4","x4"],coefficient({"c":1}))]
 
 for i in geometricInfinitesimals:
     print i
@@ -182,15 +153,44 @@ for i in tempvec:
         m.coeff.sort()
     i.sort()
     print i
-tempvec = []
-g = GerstenhaberBracket(m2(basisHH2[2]),m2(basisHH2[6]))     
-for doublyDefined in basisK3:
-
-    doublyDefined= copy.deepcopy(doublyDefined)
     
-    tempvec.append(g(doublyDefined))
-    print "one calculation done", doublyDefined
-print tempvec
+    #################TEMP CODE STARTS #######################
+#    geometricInfinitesimals = [mono(["x1","x1"],coefficient({"e":1}))*(-1),
+                            #mono(["x2","x2"],coefficient({"e":1}))*(-1),
+                            #zero,
+                            #mono(["x2","x1"],coefficient({"e":1}))*(-1)
+                            #+mono(["x1","x1"],coefficient({"b":1})),
+                            #mono(["x2","x3"],coefficient({"e":1}))*(-2),
+                            #mono(["x1","x3"],coefficient({"b":1}))*(-1)]
+
+#for i in geometricInfinitesimals:
+    #print i
+  
+
+#tempvec = []
+#m2f = m2(interpretVectorAsFunctionOnK2(geometricInfinitesimals))
+#g = GerstenhaberBracket(m2f,m2f)
+#print "g-bracket done"
+#for doublyDefined in basisK3:
+
+    #doublyDefined= copy.deepcopy(doublyDefined)
+    
+    #tempvec.append(g(doublyDefined))
+    #print "one calculation done", doublyDefined
+#for i in tempvec:
+    #for m in i.monos:
+        #m.coeff.sort()
+    #i.sort()
+    #print i
+#tempvec = []
+#g = GerstenhaberBracket(m2(basisHH2[2]),m2(basisHH2[6]))     
+#for doublyDefined in basisK3:
+
+    #doublyDefined= copy.deepcopy(doublyDefined)
+    
+    #tempvec.append(g(doublyDefined))
+    #print "one calculation done", doublyDefined
+#print tempvec
 
 #f1 = open('obstructionToGeometricDeformations.txt','w')
 #

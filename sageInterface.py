@@ -40,11 +40,11 @@ one = mono()
 
 
 ###################################################################################################################################################
-####### Code to convert a vector in the degree three piece of K^3 into a vector readable by sage for linear algebra calculations  
+####### Code to convert a vector in the degree three piece of K^3 into a vector readable by sage for linear algebra calculations
 ###################################################################################################################################################
 
 
-#the first thing that is needed is to take a vector of degree three things and convert it into a vector of 0's and 1's. This will ignore coefficients, as long 
+#the first thing that is needed is to take a vector of degree three things and convert it into a vector of 0's and 1's. This will ignore coefficients, as long
 #as the coefficient is non-zero.
 
 #we have a natural order on the degree three monomials 222,221,223,224,...
@@ -100,13 +100,14 @@ def nCr(n,r):
     f = factorial
     return f(n) / f(r) / f(n-r)
 
-def KnToVectSplitUp(vect,n,degree):#This function requires you to state the degree as this saves unnecessary work on behalf of the coder! it assumes of course that you are only looking at homogenous vectors
+def KnToVectSplitUp(vect,n,degree):#This function requires you to state the degree as this saves unnecessary work on behalf of the coder! it assumes of course that you are only looking at homogenous vectors. n is
+    ########### where in the complex you are, degree is degree in grading
     monomialDimension = nCr(3 + degree, 3)
     totalDimension = nCr(4,n) * monomialDimension
-    answer = [] 
+    answer = []
     def monoToVect(m,component):
         mVect = [0] * totalDimension
-        mCoeff = m.coeff 
+        mCoeff = m.coeff
         component = component * monomialDimension + monoToNumber(m)
         mVect[component] = 1
         return (mCoeff,mVect)
@@ -134,13 +135,32 @@ def vectOfNumsSplitUpToVect(vect,dimension): #TODO: modify this function to conv
         answer[component] += i[0].coeffs[""]
     return answer
 
+def vectOfqNumsSplitUpToVect(vect,dimension):
+    answer = [0] * dimension
+    for i in vect:
+        component = None
+        for jnum,j in enumerate(i[1]):
+            if j != 0:
+                component = jnum
+                break
+        answer[component] = str(0)
+        for k,l in i[0].coeffs.iteritems():
+            if k!= "":
+                answer[component] += "+" + str(l) + "*" + "*".join([x for x in k])
+            else:
+                answer[component] += "+" + str(l)
+    return answer
+
+
+
 def vectSplitUpToKn(vect,n,degree):
     monoDimension = nCr(3+degree,3)
     rankOfKn = nCr(4,n)
-    vectOfMonos = [zero] * rankOfKn 
+    vectOfMonos = [zero] * rankOfKn
     totalDimension = monoDimension * rankOfKn
     for i in vect:
-        assert isinstance(i[0],coefficient) and len(i[1]) == totalDimension
+        assert isinstance(i[0],coefficient)
+        assert len(i[1]) == totalDimension
         mCoeff = i[0]
         position = 0
         if i[1] == [0 for _ in xrange(totalDimension)]:
@@ -150,7 +170,7 @@ def vectSplitUpToKn(vect,n,degree):
                 position = inum
                 break
         component = position // monoDimension
-        monoNum = position % monoDimension 
+        monoNum = position % monoDimension
         vectOfMonos[component] = vectOfMonos[component] + numberToMono(monoNum,degree) * mCoeff
     return vectOfMonos
 def vectToVectSplitUp(vect):
@@ -163,5 +183,55 @@ def vectToVectSplitUp(vect):
             mVect[inum] = 1
             answer.append( (mCoeff,mVect))
     return answer
+def qvectToVectSplitUp(vect):
+    qNumRe = re.compile(r"(-?\d*q\^\d+|-?\d*q|-?\d+(?=\+|$|-))")
+    qPowerRe = re.compile(r"(-?\d*)q\^(\d+)")
+    qRe = re.compile(r"(-?\d*)q")
+    dimension = len(vect)
+    answer = []
+    def isNum(x):
+        if x.isdigit() or (x[0]== "-" and x[1:].isdigit() ):
+            return True
+        return False
 
-        
+    for inum,i in enumerate(vect):
+        if i!="0":
+            if isNum(str(i)):
+                mCoeff = coefficient.fromNumber(int(i))
+                mVect = [0] * dimension
+                mVect[inum] = 1
+                answer.append( (mCoeff,mVect))
+            else:
+                coeffs = {}
+                r = re.findall(qNumRe,str(i))
+                for k in r:
+                    if isNum(k):
+                        coeffs[""] = int(k)
+                    elif re.match(qRe,k):
+                        f = re.findall(qRe,k)
+                        if f[0] == "":
+                            coeffs["q"] = 1
+                        elif f[0] == "-":
+                            coeffs["q"] = -1
+                        else:
+                            coeffs["q"] = int(f[0])
+                    elif re.match(qPowerRe,k):
+                        f = re.findall(qPowerRe,k)
+                        power = int(f[1])
+                        qstr = "q" * power
+                        if f[0] =="":
+                            coeffs[qstr] = 1
+                        else:
+                            coeffs[qstr]=int(f[0])
+                mCoeff = coefficient(coeffs)
+                mVect = [0] * dimension
+                mVect[inum] = 1
+                answer.append((mCoeff,mVect))
+    return answer
+
+
+
+
+
+
+
