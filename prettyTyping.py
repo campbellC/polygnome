@@ -2,7 +2,9 @@ import re
 
 
 xre = re.compile(r'([a-zA-Z])([\d]+)')
-
+def polynomialToLatex(poly):
+    poly = re.sub(xre, r'\1_\2', poly.__repr__())
+    return poly #note this has different format to other functions need to make style decision about this
 def vectToLatex(vect):
     print '\\left( \\begin{array}{c}'
     for i in vect:

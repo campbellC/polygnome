@@ -6,7 +6,7 @@ import pureTensor
 ##changes to be made: rels will now be a dictionary with [a,b]: [c,d,coeff].
 class monomial:
     """A monomial is just a list of variables with a coefficient"""
-    
+
     def __init__(self,vs = [],symbs=[],rels={},coeff = coefficient.coefficient()):
         self.symbs = copy.deepcopy(symbs)
         self.rels = copy.deepcopy(rels)
@@ -14,16 +14,30 @@ class monomial:
         self.vs = copy.deepcopy(vs)
         self.coeffsFlag = len(rels.values()[0]) == 3 # this flag lets you know that you are using coefficients of not.
         self.sanityCheck()
-    
+
+        @classmethod
+        def fromPoly(cls,poly):
+            assert len(poly.monos) in [0,1]
+            if len(poly,monos) == 0 :
+                return cls(coeff = coefficient.fromNumber(0))
+            else:
+                x = poly.monos[0]
+                symbs = copy.deepcopy(x.symbs)
+                rels = copy.deepcopy(x.rels)
+                coeff = copy.deepcopy(x.coeff)
+                vs = copy.deepcopy(x.vs)
+                coeffsFlag = x.coeffsFlag
+                return cls(vs,symbs,rels,coeff)
+
     def degree(self):
         return len(self.vs)
-    
+
     def isNum(self):
         return len(self.vs) == 0
-    
+
     def isZero(self):
         return self.coeff.isZero()
-    
+
     ##################################################################################################################
     #### Methods for sorting the monomial
     ###################################################################################################################
@@ -35,7 +49,7 @@ class monomial:
                 return False
         self.sanityCheck()
         return True
-    
+
     def sort(self):
         self.sanityCheck()
         if self.sorted():
@@ -53,15 +67,15 @@ class monomial:
 
         self.sanityCheck()
         self.sort()
-            
+
     def safeSort(self):#this will output the sorted list
         self.sanityCheck()
         ret = copy.deepcopy(self)
         ret.sort()
         return ret.vs
-        
+
     def facSeq(self):#this will be a factorisation sequence which will return a  [[monomial-repr, position using r i.e. the left hand position! , r used as a one key dict]]
-        assert not self.coeffFlags #TODO: make this work without this assertion
+        assert not self.coeffsFlag #TODO: make this work without this assertion
         self.sanityCheck()
         ret = []
         mon = copy.deepcopy(self)
@@ -72,13 +86,13 @@ class monomial:
             if tuple(mon.vs[i:i+2]) in mon.rels:
                 t = copy.deepcopy(mon)
                 t.vs[i:i+2] = mon.rels[tuple(mon.vs[i:i+2])][:2]
-                return [[mon,i,{tuple(mon.vs[i:i+2]):mon.rels[tuple(mon.vs[i:i+2])]}]] + t.facSeq() 
-    
-                
+                return [[mon,i,{tuple(mon.vs[i:i+2]):mon.rels[tuple(mon.vs[i:i+2])]}]] + t.facSeq()
+
+
     ##################################################################################################################
-    #### __methods__ 
-    ###################################################################################################################       
-    
+    #### __methods__
+    ###################################################################################################################
+
     def __eq__(self,other):
         self.sanityCheck()
         x=self-other
@@ -87,7 +101,7 @@ class monomial:
             return True
         else:
             return False
-    
+
     def __repr__(self):
         self.sanityCheck()
         if self.isZero():
@@ -100,7 +114,7 @@ class monomial:
             return "-"+"".join(self.vs)
         else:
             return self.coeff.__repr__() +"*" + "".join(self.vs)
-    
+
     def __add__(self,other):
         if isinstance(other,monomial):
             assert other.symbs == self.symbs
@@ -113,7 +127,7 @@ class monomial:
         if isinstance(other,polynomial.polynomial):
             answer = copy.deepcopy(other)
             return answer + self
-      
+
     def __mul__(self,other):
         self.sanityCheck()
         ret = copy.deepcopy(self)
@@ -124,7 +138,7 @@ class monomial:
         if isinstance(other,monomial):
             ret.vs += other.vs
             ret.coeff = ret.coeff*other.coeff
-        
+
         if isinstance(other,pureTensor.pureTensor):
             ret = copy.deepcopy(other)
             ret.monos[0] = self * ret.monos[0]
@@ -136,12 +150,12 @@ class monomial:
         if type(other) in [float,int,str] or isinstance(other,coefficient.coefficient):
             ret.coeff = ret.coeff * other
         return ret
-    
-    
+
+
     def __sub__(self,other):
         self.sanityCheck()
         return self + (other * (-1))
-    ##############################################################################################################        
+    ##############################################################################################################
     ########### safety checks for debugging
     ##############################################################################################################
     def sanityCheck(self):
@@ -150,19 +164,19 @@ class monomial:
             assert isinstance(i,str)
         ######################
         assert isinstance(self.rels, dict)
-        
+
         for i in self.rels.keys():
             assert isinstance(i,tuple)
             for j in i:
                 assert j in self.symbs
-        
+
         for i in self.rels.values():
             assert isinstance(i,list)
             for j in i[:2]:
                 assert j in self.symbs
         #######################
         assert isinstance(self.coeff,coefficient.coefficient)
-        
+
         #######################
         assert isinstance(self.vs,list)
         for i in self.vs:

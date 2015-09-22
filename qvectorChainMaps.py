@@ -31,7 +31,7 @@ one = mono()
 ######################################################### the following are the chain maps for aq ###################################
 ######################################################################################################################################
 
-def k1(vect): 
+def qk1(vect): 
     """This map takes a vector of 4 elements of Aq and
     returns a vector of six elements of A i.e. how it acts on the four basis vectors of K_1
     and returns how it acts on the six basis vectors of K_2, the 4 vector takes
@@ -46,17 +46,17 @@ def k1(vect):
 
 
 
-def k2(vect): 
+def qk2(vect): 
     """this takes a vector of six elements, which are the images of the 
     6 basis vectors of K_2 (i.e. the relations) and returns a
     vector of six elements which is where the 4 doubly defined relations go."""
     vect = ["placeholder"] + vect #this means that vect[1] is what vect sends r1 to
-    return [ x3 * vect[4] + x1 * vect[6] - x1 * vect[5] - vect[1]*x2 + vect[5] * x3,\
+    return [ x3 * vect[4] + x1 * vect[6] * q - x1 * vect[5] - vect[1]*x2 + vect[5] * x3,\
              x4 * vect[1] - x1 * vect[3] - vect[6] * x1 - vect[4]*x3 + vect[3] * x3,\
              x4 * vect[5] - x1 * vect[2] - vect[6] * x2  - vect[4]*x4*q + vect[3] * x4 * q,\
              x4 * vect[4] + x2 * vect[6] * q - x2 * vect[5] - vect[3]*x2 + vect[2] * x3]
 
-def k3(vect):
+def qk3(vect):
     """Takes a vector of four elements in A,
     which are the images of the doubly defined relations
     under that vector, and returns the image of the only triply defined relation"""
