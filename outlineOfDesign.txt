@@ -1,0 +1,7 @@
+Currently we have a flat design structure. Even though monomials and polynomials have many of the same methods, we have no superclass for them.
+To rectify this we will use a Composite design pattern. abstractPolynomial will be a superclass of polynomial, monomial, generator, PBW monomial.
+The simplify method will be of type (this -> abstractPolynomial) since generator -> generator, polynomial -> polynomial but monomial goes to possibly PBW monomial or polynomial.
+
+Now Tensors are another composite, this time of pure tensor and tensor. These pure tensors are also containers of abstract polynomials.
+
+As for the implementation of generators and relations. %TODO: design these
