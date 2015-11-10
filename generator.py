@@ -16,11 +16,12 @@ class generator(abstractPolynomial.abstractPolynomial):
     ######  CONSTRUCTORS
     ##############################################################################
 
-    def __init__(self,string,number=None):
+    def __init__(self,string,number=None,algebra=None):
         assert isinstance(string,str)
         assert isinstance(number,int) or number is None
         self.string = string
         self.number = number
+        self.algebra = algebra
 
     ##############################################################################
     ######  MATHEMATICAL METHODS
@@ -33,13 +34,17 @@ class generator(abstractPolynomial.abstractPolynomial):
         new = monomial.monomial.fromGenerator(self)
         return new + other
 
-    def __sub__(self,other):
-        new = monomial.monomial.fromGenerator(self)
-        return new - other
+    def __radd__(self,other):
+        return self + other
+
 
     def __mul__(self,other):
         new = monomial.monomial.fromGenerator(self)
         return new * other
+
+    def __rmul__(self,other):
+        new = monomial.monomial.fromGenerator(self)
+        return other * new
     ##############################################################################
     ######  PRINTING AND TYPING
     ##############################################################################

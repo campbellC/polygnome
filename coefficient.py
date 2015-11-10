@@ -97,8 +97,19 @@ class coefficient(abstractPolynomial.abstractPolynomial):
                     newCoeffs[i] = self.coeffs[i]
             newCoefficient = coefficient(newCoeffs)
             return newCoefficient.sort()
+        elif type(other) in [float,int]:
+            newCoefficient = coefficient.fromNumber(other)
+            return self + newCoefficient
         else:
             return NotImplemented
+
+    def __radd__(self,other):
+        if type(other) in [float,int]:
+            return self + other
+        else:
+            return NotImplemented
+
+
 
     def __mul__(self,other):
         if isinstance(other,coefficient):
@@ -117,8 +128,12 @@ class coefficient(abstractPolynomial.abstractPolynomial):
         else:
             return NotImplemented
 
-    def __sub__(self,other):
-        return self + (other * (-1))
+    def __rmul__(self,other):
+        if type(other) in [float,int]:
+            return self * other
+        else:
+            return NotImplemented
+
 
     ##############################################################################
     ######  PRINTING AND TYPING

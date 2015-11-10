@@ -15,11 +15,13 @@ class relation(polygnomeObject.polygnomeObject):
     ######  polygnomeObject code
     ##############################################################################
     def __init__(self,gen1,gen2,poly):
+        assert isinstance(gen2, generator.generator)
+        assert isinstance(gen1, generator.generator)
+        assert issubclass(poly, abstractPolynomial.abstractPolynomial)
         self.generator1 =gen1
         self.generator2 = gen2
         self.LHS = monomial.fromGenerator(gen1) * monomial.fromGenerator(gen2)
         self.RHS = poly
-        self.sanityCheck()
 
 
     def __repr__(self):
@@ -28,11 +30,6 @@ class relation(polygnomeObject.polygnomeObject):
     def toLatex(self):
         return (self.LHS - self.RHS).toLatex()
 
-    def sanityCheck(self):
-        assert issubclass(self.LHS,monomial.monomial)
-        assert issubclass(self.RHS,abstractPolynomial.abstractPolynomial)
-        assert issubclass(self.generator1,generator.generator)
-        assert issubclass(self.generator2,generator.generator)
     ##############################################################################
     ######  ACTION CODE
     ##############################################################################
@@ -43,6 +40,3 @@ class relation(polygnomeObject.polygnomeObject):
     def act(self,gen1,gen2):
         return self.RHS
 
-if __name__ == '__main__':
-    x = generator("x")
-    y = generator("y")

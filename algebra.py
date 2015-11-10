@@ -1,6 +1,5 @@
 import polygnomeObject
 import relation
-import generator
 
 class algebra(polygnomeObject.polygnomeObject):
     """
@@ -8,31 +7,28 @@ class algebra(polygnomeObject.polygnomeObject):
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
     Github: https://github.com/chriscampbell19
-    Description: An algebra is basically a container for generators and relations, so that polynomials know where they live.
+    Description: An algebra is basically a container for relations, so that polynomials know where they live.
     """
-    def __init__(self,gens,rels=[]):
-        self.generators = gens
-        self.relations = rels
-        self.sanityCheck()
-
+    def __init__(self,relations=None):
+        if relations is None:
+            relations =()
+        assert isinstance(relations,tuple)
+        for i in relations:
+            assert isinstance(i,relation.relation)
+        self.relations = relations
 
     def __repr__(self):
-        return "Algebra with generators " + self.generators.__repr__() + " subject to relations " + self.relations.__repr__()
+        return "Algebra subject to relations " + self.relations.__repr__()
 
     def toLatex(self):
-        return "Algebra with generators $" + "$,$".join([i.toLatex() for i in self.generators])\
-            + "$ subject to relations $" + "$,$".join([i.toLatex() for i in self.relations]) + "$"
+        return "Algebra subject to relations $" + "$,$".join([i.toLatex() for i in self.relations]) + "$"
 
 
-    def sanityCheck(self):
-        assert type(self.generators) is list
-        assert len(self.generators) > 0
-        for i in self.generators:
-            assert isinstance(i,generator.generator)
-        assert type(self.relations) is list
+    def __iter__(self):
+        """Iterating through an algebra simply returns the relations of that algebra"""
         for i in self.relations:
-            assert isinstance(i,relation.relation)
+            yield i
+
 
 if __name__ == '__main__':
-    x = generator.generator(x)
-    y = generator.generator(y)
+    pass
