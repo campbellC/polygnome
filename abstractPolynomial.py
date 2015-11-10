@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import polygnomeObject
+import copy
 
 class abstractPolynomial(polygnomeObject.polygnomeObject):
     __metaclass__ = ABCMeta
@@ -8,7 +9,7 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
     Github: https://github.com/chriscampbell19
-    Description: An abstract superclass for polynomials, monomials, generators and PBWmonomials.
+    Description: An abstract superclass for polynomials, monomials, generators and coefficients.
     Most of the methods must be instantiated for yourself.
     """
 
@@ -16,14 +17,14 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
     ##############################################################################
     ######  SORTING METHODS
     ##############################################################################
-    @abstractmethod
-    def isSorted(): pass
+    def isSorted(self):
+        return True
 
-    @abstractmethod
-    def sort(): pass
+    def sort(self): pass
 
-    @abstractmethod
-    def safeSort(): pass
+
+    def safeSort(self):
+        return copy.deepcopy(self)
 
     ##############################################################################
     ######  MATHEMATICAL METHODS

@@ -1,5 +1,7 @@
-import polygnomeObject
-class generator(polygnomeObject.polygnomeObject):
+import monomial
+import abstractPolynomial
+
+class generator(abstractPolynomial.abstractPolynomial):
     """
     File: generator.py
     Author: Chris Campbell
@@ -8,6 +10,9 @@ class generator(polygnomeObject.polygnomeObject):
     Description: A generator for an algebra over some coefficient ring. These generators are always a
     nonempty string with possibly a number associated (e.g. alpha_1, x, y, q_10000)
     """
+    ##############################################################################
+    ######  Polygnome object methods
+    ##############################################################################
 
     def __init__(self,string,number=None):
         self.string = string
@@ -31,6 +36,26 @@ class generator(polygnomeObject.polygnomeObject):
         assert isinstance(self.string,str) #generators must have a string
         assert self.string != "" #generators cannot have the empty string as their string
         assert type(self.number) is int or self.number is None #a generator must have an integer or no number associated
+
+    ##############################################################################
+    ######  abstractPolynomial methods
+    ##############################################################################
+    def isZero(self):
+        return False
+
+
+    def __add__(self,other):
+        new = monomial.monomial.fromGenerator(self)
+        return new + other
+
+    def __sub__(self,other):
+        new = monomial.monomial.fromGenerator(self)
+        return new - other
+
+    def __mul__(self,other):
+        new = monomial.monomial.fromGenerator(self)
+        return new * other
+
 
 if __name__ == '__main__':
     x = generator("x",1)

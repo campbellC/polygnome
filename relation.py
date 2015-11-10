@@ -1,6 +1,7 @@
 import polygnomeObject
 import monomial
 import abstractPolynomial
+import generator
 
 class relation(polygnomeObject.polygnomeObject):
     """
@@ -10,10 +11,16 @@ class relation(polygnomeObject.polygnomeObject):
     Github: https://github.com/chriscampbell19
     Description: A quadratic relation in the free algebra that will be used to reduce monomials.
     """
-    def __init__(self,mono,poly):
-        self.LHS = mono
+    ##############################################################################
+    ######  polygnomeObject code
+    ##############################################################################
+    def __init__(self,gen1,gen2,poly):
+        self.generator1 =gen1
+        self.generator2 = gen2
+        self.LHS = monomial.fromGenerator(gen1) * monomial.fromGenerator(gen2)
         self.RHS = poly
         self.sanityCheck()
+
 
     def __repr__(self):
         return (self.LHS - self.RHS).__repr__()
@@ -22,7 +29,20 @@ class relation(polygnomeObject.polygnomeObject):
         return (self.LHS - self.RHS).toLatex()
 
     def sanityCheck(self):
-        assert issubclass(self.mono,monomial.monomial)
-        assert self.mono.coefficient == 1
-        assert issubclass(self.poly,abstractPolynomial.abstractPolynomial)
+        assert issubclass(self.LHS,monomial.monomial)
+        assert issubclass(self.RHS,abstractPolynomial.abstractPolynomial)
+        assert issubclass(self.generator1,generator.generator)
+        assert issubclass(self.generator2,generator.generator)
+    ##############################################################################
+    ######  ACTION CODE
+    ##############################################################################
 
+    def doesAct(self,gen1,gen2): #Check if this relation can act on a pair of generators
+        return gen1 == self.generator1 and gen2 == self.generator2
+
+    def act(self,gen1,gen2):
+        return self.RHS
+
+if __name__ == '__main__':
+    x = generator("x")
+    y = generator("y")

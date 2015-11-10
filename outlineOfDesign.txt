@@ -1,7 +1,48 @@
-Currently we have a flat design structure. Even though monomials and polynomials have many of the same methods, we have no superclass for them.
-To rectify this we will use a Composite design pattern. abstractPolynomial will be a superclass of polynomial, monomial, generator, PBW monomial.
-The simplify method will be of type (this -> abstractPolynomial) since generator -> generator, polynomial -> polynomial but monomial goes to possibly PBW monomial or polynomial.
+The overall design is as follows, based on the composite design pattern. 
 
-Now Tensors are another composite, this time of pure tensor and tensor. These pure tensors are also containers of abstract polynomials.
+Need to decide how to encapsulate the algebra behaviour. If we have an algebra being a set of relations and that's all it is. Assume the user will know not to mingle symbols from different algebras.
 
-As for the implementation of generators and relations. %TODO: design these
+Each abstractPolynomial has an algebra field which determines what algebra it belongs to. We will never copy this field so shouldn't use up lots of memory.
+
+abstractPolynomial is based on the composite design pattern, but they should be immutable or rather should act as though immutable. So the sort function should return a new polynomial.
+
+The leaves are generators and coefficients.
+
+A monomial is a combination of generators and a coefficient.
+
+A polynomial is combination of monomials.
+
+
+Leave Tensors aside for now!
+A pure tensor is a combination of polynomials.
+
+A tensor is a combination of pure tensors and is to pure tensor as polynomial is to monomial.
+
+
+
+
+
+polynomial
+--------------------
+-put into pbw order
+-iterate through monomials
+-test if zero
+-test if in pbw order
+-multiply on left or right by any abstractPolynomial
+
+monomial
+---------------
+-put into pbw order
+-iterate through symbols?
+-test if zero
+-test if in pbw order 
+-multiply on left or right by any abstractPolynomial
+
+
+coefficients
+---------------
+- order by variables
+- multiply etc
+- iterate through 'monomials'
+- multiply on left or right by any abstractPolynomial
+

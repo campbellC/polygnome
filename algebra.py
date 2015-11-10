@@ -36,4 +36,3 @@ class algebra(polygnomeObject.polygnomeObject):
 if __name__ == '__main__':
     x = generator.generator(x)
     y = generator.generator(y)
-    r = relation
