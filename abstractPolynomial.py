@@ -1,6 +1,5 @@
 from abc import ABCMeta, abstractmethod
 import polygnomeObject
-import copy
 
 class abstractPolynomial(polygnomeObject.polygnomeObject):
     __metaclass__ = ABCMeta
@@ -20,11 +19,10 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
     def isSorted(self):
         return True
 
-    def sort(self): pass
+    def sort(self):
+        return self
 
 
-    def safeSort(self):
-        return copy.deepcopy(self)
 
     ##############################################################################
     ######  MATHEMATICAL METHODS
@@ -33,9 +31,8 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
     def isZero(self): pass
 
     def __eq__(self,other):
-        self.sanityCheck()
         x = self - other
-        x.sort()
+        x = x.sort()
         if x.isZero():
             return True
         else:
@@ -59,9 +56,3 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
 
     @abstractmethod
     def toLatex(self): pass
-    ##############################################################################
-    ######  Debugging and Testing Code
-    ##############################################################################
-
-    @abstractmethod
-    def sanityCheck(self): pass

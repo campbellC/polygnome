@@ -38,6 +38,10 @@ monomial
 -test if in pbw order 
 -multiply on left or right by any abstractPolynomial
 
+generators
+-----------------
+- for now just a string pretty much
+
 
 coefficients
 ---------------

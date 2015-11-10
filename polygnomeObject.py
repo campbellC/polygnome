@@ -18,7 +18,5 @@ class polygnomeObject(object):
     @abstractmethod
     def toLatex(self): pass #so that every object will know how to output it's own latex representation
 
-    @abstractmethod
-    def sanityCheck(self): pass #every object must be able to throw assertion errors for it's own implementation faults
 
 

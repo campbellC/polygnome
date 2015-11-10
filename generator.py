@@ -8,37 +8,22 @@ class generator(abstractPolynomial.abstractPolynomial):
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
     Github: https://github.com/chriscampbell19
     Description: A generator for an algebra over some coefficient ring. These generators are always a
-    nonempty string with possibly a number associated (e.g. alpha_1, x, y, q_10000)
+    nonempty string with possibly a number associated (e.g. alpha_1, x, y, q_10000).
+
+    If ever used as an actual symbol to be manipulated it defaults to being the monomial with it's value and a coefficient of 1.
     """
     ##############################################################################
-    ######  Polygnome object methods
+    ######  CONSTRUCTORS
     ##############################################################################
 
     def __init__(self,string,number=None):
+        assert isinstance(string,str)
+        assert isinstance(number,int) or number is None
         self.string = string
         self.number = number
-        self.sanityCheck()
-
-    def __repr__(self):
-        ret = self.string
-        if self.number is not None:
-            ret = ret + str(self.number)
-        return ret
-
-    def toLatex(self):
-        ret = self.string
-        if self.number is not None:
-            ret = ret + "_{" + str(self.number) + "}"
-        return ret
-    #TODO:add a to monomial function, or make a monomial constructor fromGenerator
-
-    def sanityCheck(self):
-        assert isinstance(self.string,str) #generators must have a string
-        assert self.string != "" #generators cannot have the empty string as their string
-        assert type(self.number) is int or self.number is None #a generator must have an integer or no number associated
 
     ##############################################################################
-    ######  abstractPolynomial methods
+    ######  MATHEMATICAL METHODS
     ##############################################################################
     def isZero(self):
         return False
@@ -55,6 +40,21 @@ class generator(abstractPolynomial.abstractPolynomial):
     def __mul__(self,other):
         new = monomial.monomial.fromGenerator(self)
         return new * other
+    ##############################################################################
+    ######  PRINTING AND TYPING
+    ##############################################################################
+
+    def __repr__(self):
+        ret = self.string
+        if self.number is not None:
+            ret = ret + str(self.number)
+        return ret
+
+    def toLatex(self):
+        ret = self.string
+        if self.number is not None:
+            ret = ret + "_{" + str(self.number) + "}"
+        return ret
 
 
 if __name__ == '__main__':

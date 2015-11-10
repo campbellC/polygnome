@@ -10,7 +10,4 @@ class monomial(abstractPolynomial):
     Description: A monomial carries a list of relations that it can apply at any time.
     """
 
-    ##############################################################################
-    ######  polygnome object methods
-    ##############################################################################
 
