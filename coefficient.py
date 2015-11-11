@@ -103,13 +103,6 @@ class coefficient(abstractPolynomial.abstractPolynomial):
         else:
             return NotImplemented
 
-    def __radd__(self,other):
-        if type(other) in [float,int]:
-            return self + other
-        else:
-            return NotImplemented
-
-
 
     def __mul__(self,other):
         if isinstance(other,coefficient):

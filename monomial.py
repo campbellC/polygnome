@@ -10,7 +10,8 @@ class monomial(abstractPolynomial.abstractPolynomial):
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
     Github: https://github.com/chriscampbell19
-    Description:
+    Description: A monomial is basically a coefficient and a tuple of generators.
+    The coefficient can change if you call sort, but otherwise it is immutable.
     """
     ##############################################################################
     ######  CONSTRUCTORS
@@ -48,6 +49,14 @@ class monomial(abstractPolynomial.abstractPolynomial):
     @classmethod
     def fromCoefficientAndAlgebra(cls,coeff,alg):
         return cls(coeff,None,alg)
+
+    @classmethod
+    def fromPolynomial(cls,poly):
+        assert len(poly.monomials) <= 1
+        if len(poly.monomials) == 0:
+            return monomial.fromNumberAndAlgebra(0,poly.algebra)
+        else:
+            return poly.monomials[0]
     ##############################################################################
     ######  SORTING METHODS
     ##############################################################################
@@ -68,6 +77,8 @@ class monomial(abstractPolynomial.abstractPolynomial):
                 #return [[mon,i,{tuple(mon.vs[i:i+2]):mon.rels[tuple(mon.vs[i:i+2])]}]] + t.facSeq()
 
     def isSorted(self):
+        if self.algebra is None:
+            return True
         for index,i in enumerate(self.generators[:-1]):
             for relation in self.algebra:
                 if relation.doesAct(i,self.generators[index+1]):
@@ -104,6 +115,19 @@ class monomial(abstractPolynomial.abstractPolynomial):
     ######  MATHEMATICAL METHODS
     ##############################################################################
 
+    def degree(self):
+        return len(self.generators)
+
+    def isAddable(self,other):
+        if self.degree() != other.degree():
+            return False
+        x = self.sort()
+        y = other.sort()
+        if x.generators == y.generators:
+            return True
+        else:
+            return False
+
     def isNum(self):
         return len(self.generators) == 0
 
@@ -113,7 +137,11 @@ class monomial(abstractPolynomial.abstractPolynomial):
     def __add__(self,other ):
         if isinstance(other,monomial):
             if self.algebra is other.algebra:
-                return polynomial.fromMonomials((self,other)).sort()
+                if self.isAddable(other):
+                    newCoefficient = self.coefficient + other.coefficient
+                    return monomial(newCoefficient,self.generators,self.algebra)
+                else:
+                    return polynomial.polynomial.fromMonomials((self,other)).sort()
             else:
                 return NotImplemented
         elif isinstance(other, generator.generator):
@@ -128,8 +156,6 @@ class monomial(abstractPolynomial.abstractPolynomial):
         else:
             return NotImplemented
 
-    def __radd__(self,other): # addition is commutative!
-        return self + other
 
 
     def __mul__(self,other):
@@ -191,7 +217,7 @@ if __name__ == '__main__':
     y = generator.generator("y",1000)
     #z = generator("", 2000)
     #import pdb; pdb.set_trace()
-    print 13 * x * y * 13
+    print x + x
 
 
 

@@ -34,9 +34,6 @@ class generator(abstractPolynomial.abstractPolynomial):
         new = monomial.monomial.fromGenerator(self)
         return new + other
 
-    def __radd__(self,other):
-        return self + other
-
 
     def __mul__(self,other):
         new = monomial.monomial.fromGenerator(self)

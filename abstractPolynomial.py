@@ -47,6 +47,9 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
 
     def __sub__(self,other):
         return self + (other * (-1))
+
+    def __radd__(self,other): #addition is always commutative
+        return self + other
     ##############################################################################
     ######  PRINTING AND TYPING
     ##############################################################################
