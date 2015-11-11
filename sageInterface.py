@@ -10,14 +10,14 @@ from chainMaps import barMap
 from gerstenhaberBracket import GerstenhaberBracket, interpretVectorAsFunctionOnK2, m2
 from prettyTyping import *
 c = coefficient()
-
+q = coefficient({'q':1})
 symbs = ["x1", "x2","x3","x4"]
-rels = { ("x3" ,"x1") : ["x1", "x3"],\
-    ("x4", "x2") : ["x2", "x4"],\
-    ("x4", "x1") : ["x2", "x3"],\
-    ("x1", "x2") : ["x2", "x3"],\
-    ("x3", "x2") : ["x1", "x4"],\
-    ("x4", "x3") : ["x1", "x4"]}
+rels = { ("x3" ,"x1") : ["x1", "x3",c],\
+    ("x4", "x2") : ["x2", "x4",q],\
+    ("x4", "x1") : ["x2", "x3",c],\
+    ("x1", "x2") : ["x2", "x3",c],\
+    ("x3", "x2") : ["x1", "x4",q],\
+    ("x4", "x3") : ["x1", "x4",c]}
 r = {1: {("x3" ,"x1") : ["x1", "x3"]},\
     2: {("x4", "x2") : ["x2", "x4"]},\
     3: {("x4", "x1") : ["x2", "x3"]},\
