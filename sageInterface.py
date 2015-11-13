@@ -184,9 +184,9 @@ def vectToVectSplitUp(vect):
             answer.append( (mCoeff,mVect))
     return answer
 def qvectToVectSplitUp(vect):
-    qNumRe = re.compile(r"(-?\d*q\^\d+|-?\d*q|-?\d+(?=\+|$|-))")
-    qPowerRe = re.compile(r"(-?\d*)q\^(\d+)")
-    qRe = re.compile(r"(-?\d*)q")
+    qNumRe = re.compile(r"(-?\d*\*?q\^\d+|-?\d*\*?q|-?\d+(?=\+|$|-))")
+    qPowerRe = re.compile(r"(-?\d*)\*?q\^(\d+)")
+    qRe = re.compile(r"(-?\d*)\*?q$")
     dimension = len(vect)
     answer = []
     def isNum(x):
@@ -195,6 +195,8 @@ def qvectToVectSplitUp(vect):
         return False
 
     for inum,i in enumerate(vect):
+        i = ''.join(i.split())
+
         if i!="0":
             if isNum(str(i)):
                 mCoeff = coefficient.fromNumber(int(i))
@@ -208,7 +210,7 @@ def qvectToVectSplitUp(vect):
                     if isNum(k):
                         coeffs[""] = int(k)
                     elif re.match(qRe,k):
-                        f = re.findall(qRe,k)
+                        f = re.match(qRe,k).groups()
                         if f[0] == "":
                             coeffs["q"] = 1
                         elif f[0] == "-":
@@ -216,11 +218,13 @@ def qvectToVectSplitUp(vect):
                         else:
                             coeffs["q"] = int(f[0])
                     elif re.match(qPowerRe,k):
-                        f = re.findall(qPowerRe,k)
+                        f = re.match(qPowerRe,k).groups()
                         power = int(f[1])
                         qstr = "q" * power
                         if f[0] =="":
                             coeffs[qstr] = 1
+                        elif f[0] == "-":
+                            coeffs[qstr] = -1
                         else:
                             coeffs[qstr]=int(f[0])
                 mCoeff = coefficient(coeffs)
