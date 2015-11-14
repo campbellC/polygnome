@@ -17,10 +17,26 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
     ######  SORTING METHODS
     ##############################################################################
     def isSorted(self):
-        return True
+        if self.algebra is None:
+            return True
+        else:
+            return self.algebra.doesAct(self)
 
-    def sort(self):
-        return self
+    def reductionSequence(self):
+        if self.isSorted():
+            return []
+        else:
+            f = self.algebra.makeReductionFunction(self)
+            return [f] + f(self).reductionSequence()
+
+    def sort(self): # This will completely reduce self using all PBW relations
+        x = self.clean()
+        for i in self.reductionSequence():
+            x = i(x)
+        return x
+
+    @abstractmethod
+    def clean(): pass  #This is the method that checks if for example we have x + x and simplifies it to 2 x. This does not apply pbw relations.
 
     @abstractmethod
     def changeAlgebra(self,algebra): pass

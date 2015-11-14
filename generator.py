@@ -30,9 +30,13 @@ class generator(abstractPolynomial.abstractPolynomial):
     def changeAlgebra(self,alg):
         return generator(self.name,alg)
 
+    def clean(self):
+        return monomial.monomial.fromGenerator(self)
+
     ##############################################################################
     ######  MATHEMATICAL METHODS
     ##############################################################################
+
     def isZero(self):
         return False
 

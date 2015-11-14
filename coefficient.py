@@ -50,6 +50,9 @@ class coefficient(abstractPolynomial.abstractPolynomial):
                 return False
         return True
 
+    def clean(self):
+        return self.sort()
+
     def sort(self):
         newCoeffs = {}
 

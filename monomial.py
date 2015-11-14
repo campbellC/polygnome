@@ -67,7 +67,8 @@ class monomial(abstractPolynomial.abstractPolynomial):
     ##############################################################################
     ######  SORTING METHODS
     ##############################################################################
-
+    def clean(self):
+        return monomial(self.coefficient.sort(),self.generators,self.algebra)
 
     #def facSeq(self):#this will be a factorisation sequence which will return a  [[monomial-repr, position using r i.e. the left hand position! , r used as a one key dict]]
         #assert not self.coeffsFlag #TODO: make this work without this assertion
@@ -90,10 +91,6 @@ class monomial(abstractPolynomial.abstractPolynomial):
         newGens = self.generators[a:b]
         return monomial(coefficient.coefficient.fromNumber(1),newGens,self.algebra)
 
-
-    #def isSorted(self):
-        #if self.algebra is None:
-            #return True
 
 
 

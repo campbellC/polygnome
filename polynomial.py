@@ -55,43 +55,60 @@ class polynomial(abstractPolynomial.abstractPolynomial):
         for i in self.monomials:
             yield i
 
-    def isSorted(self):
-        for i in self:
-            if not i.isSorted():
-                return False
+
+    def clean(self):
+        newMonos = []
         for inum,i in enumerate(self):
-            for jnum,j in enumerate(self):
-                if jnum == inum:
+            for j in newMonos:
+                if i.isAddable(j):
                     continue
 
-                if i.isAddable(j):
-                    return False
+            for jnum,j in enumerate(self):
+                if inum >= jnum:
+                    continue
+                else:
+                    if i.isAddable(j):
+                        i = i + j
+            newMonos.append(i.clean())
 
-        return True
 
-    def sort(self): #We first check if already sorted. Then we build a new array of monomials with all of the sorted monomials together (with no duplicates). Then we remove any 0 coefficient monomials.
-        if self.isSorted():
-            return self
-        newMonos = []
-        for oldMono in self:
-            newMono = oldMono.sort()
-            for index,otherMono in enumerate(newMonos):
-                if newMono.isAddable(otherMono):
-                    newMonos[index] = newMono + otherMono
-                    break
-            else:
-                newMonos.append(newMono) # this will only happen if this sequence of generators has not been seen before
+    #def isSorted(self):
+        #for i in self:
+            #if not i.isSorted():
+                #return False
+        #for inum,i in enumerate(self):
+            #for jnum,j in enumerate(self):
+                #if jnum == inum:
+                    #continue
 
-        monosWithoutZeroes = []
-        for i in newMonos:
-            if i.isZero():
-                continue
-            else:
-                monosWithoutZeroes.append(i)
-        if len(monosWithoutZeroes) > 0:
-            return polynomial.fromMonomials(tuple(newMonos))
-        else:
-            return polynomial.fromNumberAndAlgebra(0,self.algebra)
+                #if i.isAddable(j):
+                    #return False
+
+        #return True
+
+    #def sort(self): #We first check if already sorted. Then we build a new array of monomials with all of the sorted monomials together (with no duplicates). Then we remove any 0 coefficient monomials.
+        #if self.isSorted():
+            #return self
+        #newMonos = []
+        #for oldMono in self:
+            #newMono = oldMono.sort()
+            #for index,otherMono in enumerate(newMonos):
+                #if newMono.isAddable(otherMono):
+                    #newMonos[index] = newMono + otherMono
+                    #break
+            #else:
+                #newMonos.append(newMono) # this will only happen if this sequence of generators has not been seen before
+
+        #monosWithoutZeroes = []
+        #for i in newMonos:
+            #if i.isZero():
+                #continue
+            #else:
+                #monosWithoutZeroes.append(i)
+        #if len(monosWithoutZeroes) > 0:
+            #return polynomial.fromMonomials(tuple(newMonos))
+        #else:
+            #return polynomial.fromNumberAndAlgebra(0,self.algebra)
 
 
 
