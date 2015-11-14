@@ -1,7 +1,5 @@
 import polygnomeObject
-import monomial
 import abstractPolynomial
-import generator
 
 class relation(polygnomeObject.polygnomeObject):
     """
@@ -14,29 +12,33 @@ class relation(polygnomeObject.polygnomeObject):
     ##############################################################################
     ######  polygnomeObject code
     ##############################################################################
-    def __init__(self,gen1,gen2,poly):
-        assert isinstance(gen2, generator.generator)
-        assert isinstance(gen1, generator.generator)
-        assert issubclass(poly, abstractPolynomial.abstractPolynomial)
-        self.generator1 =gen1
-        self.generator2 = gen2
-        self.LHS = monomial.fromGenerator(gen1) * monomial.fromGenerator(gen2)
-        self.RHS = poly
 
+    def __init__(self,LHS,RHS):
+        assert issubclass(RHS,abstractPolynomial.abstractPolynomial)
+        assert issubclass(LHS,abstractPolynomial.abstractPolynomial)
+        assert RHS.algebra is None
+        assert LHS.algebra is None
+        self.LHS = LHS
+        self.RHS = RHS
 
     def __repr__(self):
-        return (self.LHS - self.RHS).__repr__()
+        return repr(self.LHS-self.RHS)
 
     def toLatex(self):
-        return (self.LHS - self.RHS).toLatex()
+        return (self.LHS-self.RHS).toLatex()
 
     ##############################################################################
     ######  ACTION CODE
     ##############################################################################
 
-    def doesAct(self,gen1,gen2): #Check if this relation can act on a pair of generators
-        return gen1 == self.generator1 and gen2 == self.generator2
+    def doesAct(self,poly): #some iterable containing symbols
+        return (poly - self.LHS).isZero()
 
-    def act(self,gen1,gen2):
-        return self.RHS
+    def act(self,poly):
+        if self.doesAct(poly):
+            return self.RHS
+        else:
+            return poly
 
+if __name__ == '__main__':
+    pass

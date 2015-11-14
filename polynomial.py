@@ -18,7 +18,7 @@ class polynomial(abstractPolynomial.abstractPolynomial):
 
     def __init__(self,monomials=None,alg=None):
         if monomials is None:
-            monomials = tuple()
+            monomials = ()
         assert isinstance(monomials,tuple)
         assert isinstance(alg,algebra.algebra) or alg is None
         self.monomials = monomials
@@ -43,6 +43,10 @@ class polynomial(abstractPolynomial.abstractPolynomial):
     def fromNumberAndAlgebra(cls,num,alg=None):
         mono = monomial.fromNumberAndAlgebra(num,alg)
         return polynomial.fromMonomial(mono)
+
+    def changeAlgebra(self,alg):
+        newMonos = tuple([x.changeAlgebra(alg) for x in self])
+        return polynomial(newMonos,alg)
 
     ##############################################################################
     ######  SORTING METHODS
@@ -70,7 +74,7 @@ class polynomial(abstractPolynomial.abstractPolynomial):
             return self
         newMonos = []
         for oldMono in self:
-            newMono = oldMono.sort() # having this here is more efficient since isAddable will sort it's inputs every time it is called
+            newMono = oldMono.sort()
             for index,otherMono in enumerate(newMonos):
                 if newMono.isAddable(otherMono):
                     newMonos[index] = newMono + otherMono
@@ -170,10 +174,7 @@ class polynomial(abstractPolynomial.abstractPolynomial):
         return "+".join(x.toLatex() for x in self if not x.isZero())
 
 if __name__ == '__main__':
-
-    x = generator.generator("x",1)
-    y = generator.generator("y",1000)
-    #z = generator("", 2000)
-    import pdb; pdb.set_trace()
-    print 13 * x * y * 13 + x * y * y * y
+    x = generator.generator('x')
+    y = generator.generator('y')
+    print 13 * x * y * 13 + x * y
 

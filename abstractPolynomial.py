@@ -22,6 +22,11 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
     def sort(self):
         return self
 
+    @abstractmethod
+    def changeAlgebra(self,algebra): pass
+
+    def free(self):
+        return self.changeAlgebra(None)
 
 
     ##############################################################################
