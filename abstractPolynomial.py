@@ -20,7 +20,7 @@ class abstractPolynomial(polygnomeObject.polygnomeObject):
         if self.algebra is None:
             return True
         else:
-            return self.algebra.doesAct(self)
+            return not self.algebra.doesAct(self)
 
     def reductionSequence(self):
         if self.isSorted():

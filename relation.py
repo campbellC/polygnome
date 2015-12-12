@@ -14,8 +14,8 @@ class relation(polygnomeObject.polygnomeObject):
     ##############################################################################
 
     def __init__(self,LHS,RHS):
-        assert issubclass(RHS,abstractPolynomial.abstractPolynomial)
-        assert issubclass(LHS,abstractPolynomial.abstractPolynomial)
+        assert isinstance(RHS,abstractPolynomial.abstractPolynomial)
+        assert isinstance(LHS,abstractPolynomial.abstractPolynomial)
         assert RHS.algebra is None
         assert LHS.algebra is None
         self.LHS = LHS
@@ -32,6 +32,7 @@ class relation(polygnomeObject.polygnomeObject):
     ##############################################################################
 
     def doesAct(self,poly): #some iterable containing symbols
+    	poly = poly.changeAlgebra(None)
         return (poly - self.LHS).isZero()
 
     def act(self,poly):

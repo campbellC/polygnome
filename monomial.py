@@ -33,7 +33,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
     @classmethod
     def fromNumberAndAlgebra(cls,num,alg):
         coeff = coefficient.coefficient.fromNumber(num)
-        cls(coeff,None, alg)
+        return cls(coeff,None, alg)
 
     @classmethod
     def fromGenerator(cls,gen):
@@ -62,7 +62,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
 
     def changeAlgebra(self,alg):
         newGens = [x.changeAlgebra(alg) for x in self.generators]
-        return monomial(self.coefficient,newGens,alg)
+        return monomial(self.coefficient,tuple(newGens),alg)
 
     ##############################################################################
     ######  SORTING METHODS
@@ -86,7 +86,8 @@ class monomial(abstractPolynomial.abstractPolynomial):
 
 
     def submonomial(self,a,b): #returns the monomial from position a to position b (right hand open). e.g. xy._submonomial(0,1) = x. sets coefficient to one
-        assert 0 < a < len(self.generators)
+
+        assert 0 <= a <= len(self.generators)
         assert a <= b <= len(self.generators)
         newGens = self.generators[a:b]
         return monomial(coefficient.coefficient.fromNumber(1),newGens,self.algebra)
@@ -148,7 +149,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
                     newCoefficient = self.coefficient + other.coefficient
                     return monomial(newCoefficient,self.generators,self.algebra)
                 else:
-                    return polynomial.polynomial.fromMonomials((self,other)).sort()
+                    return polynomial.polynomial.fromMonomials((self,other))
             else:
                 return NotImplemented
         elif isinstance(other, generator.generator):
@@ -219,10 +220,4 @@ class monomial(abstractPolynomial.abstractPolynomial):
 
 
 if __name__ == '__main__':
-    pass
-
-
-
-
-
-
+	pass

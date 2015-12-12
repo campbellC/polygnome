@@ -54,7 +54,13 @@ class generator(abstractPolynomial.abstractPolynomial):
         return other * new
 
     def __iter__(self):
-        return monomial.monomial.fromGenerator(self)
+        return monomial.monomial.fromGenerator(self).__iter__()
+
+    def __eq__(self,other):
+        if isinstance(other,generator):
+            return self.name == other.name
+        else:
+            return super.__eq__(self,other)
     ##############################################################################
     ######  PRINTING AND TYPING
     ##############################################################################

@@ -1,7 +1,6 @@
 import re
-import abstractPolynomial
-
-class coefficient(abstractPolynomial.abstractPolynomial):
+import polygnomeObject
+class coefficient(polygnomeObject.polygnomeObject):
     """
     File: coefficient.py
     Author: Chris Campbell

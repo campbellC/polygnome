@@ -12,6 +12,8 @@ class algebra(polygnomeObject.polygnomeObject):
     def __init__(self,relations=None):
         if relations is None:
             relations =()
+        if isinstance(relations,relation.relation):
+            relations = (relations,)
         assert isinstance(relations,tuple)
         for i in relations:
             assert isinstance(i,relation.relation)
@@ -50,7 +52,7 @@ class algebra(polygnomeObject.polygnomeObject):
             for a in xrange(n-1):
                 for i in self.relations:
                     if i.doesAct(mono.submonomial(a,a+2)):
-                        return reductionFunction.reductionFunction(self,mono.submonomial(0,a),i,mono.submonomial(a+2,n))
+                        return reductionFunction.reductionFunction(mono.submonomial(0,a),i,mono.submonomial(a+2,n))
 
 
     def canonicalProjection(self,poly):

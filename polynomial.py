@@ -70,6 +70,7 @@ class polynomial(abstractPolynomial.abstractPolynomial):
                     if i.isAddable(j):
                         i = i + j
             newMonos.append(i.clean())
+        return polynomial(tuple(newMonos),self.algebra)
 
 
     #def isSorted(self):
@@ -181,9 +182,10 @@ class polynomial(abstractPolynomial.abstractPolynomial):
     ##############################################################################
 
     def __repr__(self):
-        if self.isZero():
-            return "0"
-        return "+".join(x.__repr__() for x in self if not x.isZero())
+		#TODO: uncomment this stuff, only for debugging
+        # if self.isZero():
+			# return "0"
+		return "+".join(x.__repr__() for x in self if not x.isZero())
 
     def toLatex(self):
         if self.isZero():
