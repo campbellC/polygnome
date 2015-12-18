@@ -75,7 +75,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
                 newCoefficient = self.coefficient + other.coefficient
                 return monomial(newCoefficient,self.generators)
             else:
-                return polynomial.polynomial.fromMonomials((self,other))
+                return polynomial.polynomial((self,other))
         elif isinstance(other,coefficient.coefficient) or type(other) in [str,float,int]:
             #in this case we treat whatever we are adding as though it is a
             #coefficient lying in the underlying field
