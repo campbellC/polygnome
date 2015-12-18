@@ -1,6 +1,6 @@
 import re
-import polygnomeObject
-class coefficient(polygnomeObject.polygnomeObject):
+import arithmeticInterface
+class coefficient(arithmeticInterface.arithmeticInterface):
     """
     File: coefficient.py
     Author: Chris Campbell
@@ -13,20 +13,18 @@ class coefficient(polygnomeObject.polygnomeObject):
     ######  CONSTRUCTORS
     ##############################################################################
     def __init__(self, coeffs=None):
-        if coeffs is None:
+        if type(coeffs) in [float,int]:
+            coeffs = {'' : coeffs}
+
+        elif type(coeffs) is str:
+            coeffs = {coeffs : 1}
+
+        elif coeffs is None:
             coeffs = {'' : 1}
+
         assert isinstance(coeffs,dict)
         self.coeffs = coeffs
 
-    @classmethod
-    def fromNumber(cls,num):
-        coeffs = {"" : num}
-        return cls(coeffs)
-
-    @classmethod
-    def fromString(cls,string): #very rudimentary for now only handles variables like "q" or "a1" or maybe "a2a3" nothing better though!
-        coeffs = {string : 1}
-        return cls(coeffs)
     ##############################################################################
     ######  SORTING METHODS
     ##############################################################################
@@ -43,20 +41,10 @@ class coefficient(polygnomeObject.polygnomeObject):
         variables = "".join(sorted(arr))
         return variables
 
-    def isSorted(self):
-        for i in self.coeffs:
-            if i != self._sortVars(i):
-                return False
-        return True
-
-    def clean(self):
-        return self.sort()
-
-    def sort(self):
+    def clean(self): # simplifies expressions like x1x2 + x2x1 into 2*x1x2
         newCoeffs = {}
 
-        #WARNING - assumes length one variables in the base ring or length one plus number, like a1 b2 x9!
-
+        #This assumes length one variable names plus numbers. e.g. y100,x1,x,z
         for key in self.coeffs:
             newkey = self._sortVars(key)
             if newkey in newCoeffs:
@@ -67,6 +55,7 @@ class coefficient(polygnomeObject.polygnomeObject):
         if newCoeffs == {}:
             newCoeffs = {'':0}
         return coefficient(newCoeffs)
+
 
     ##############################################################################
     ######  MATHEMATICAL METHODS
@@ -79,8 +68,9 @@ class coefficient(polygnomeObject.polygnomeObject):
         return True
 
     def isZero(self):
-        for i in self.coeffs:
-            if self.coeffs[i] !=0:
+        x = self.clean()
+        for i in x.coeffs:
+            if x.coeffs[i] !=0:
                 return False
         return True
 
@@ -98,10 +88,11 @@ class coefficient(polygnomeObject.polygnomeObject):
                 else:
                     newCoeffs[i] = self.coeffs[i]
             newCoefficient = coefficient(newCoeffs)
-            return newCoefficient.sort()
-        elif type(other) in [float,int]:
-            newCoefficient = coefficient.fromNumber(other)
-            return self + newCoefficient
+            return newCoefficient.clean()
+
+        elif type(other) in [float,int,str,dict]:
+            return self + coefficient(other)
+
         else:
             return NotImplemented
 
@@ -116,15 +107,14 @@ class coefficient(polygnomeObject.polygnomeObject):
                     else:
                         newCoeffs[i+j] = self.coeffs[i]*other.coeffs[j]
             newCoefficient = coefficient(newCoeffs)
-            return newCoefficient.sort()
-        elif type(other) in [float,int]:
-            newCoefficient = coefficient.fromNumber(other)
-            return self * newCoefficient
+            return newCoefficient.clean()
+        elif type(other) in [float,int,str,dict]:
+            return self * coefficient(other)
         else:
             return NotImplemented
 
     def __rmul__(self,other):
-        if type(other) in [float,int]:
+        if type(other) in [float,int,str,dict]:
             return self * other
         else:
             return NotImplemented
@@ -164,9 +154,9 @@ class coefficient(polygnomeObject.polygnomeObject):
 
 
 if __name__ == '__main__':
-    q = coefficient.fromString('q')
-    a1 = coefficient.fromString('a1')
-    zero = coefficient.fromNumber(0)
+    q = coefficient('q')
+    a1 = coefficient('a1')
+    zero = coefficient(0)
 
     print q + zero
     print q * zero
