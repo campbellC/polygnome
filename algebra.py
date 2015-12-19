@@ -1,20 +1,42 @@
-import polygnomeObject
+import abstractAlgebra
 import relation
 import reductionFunction
-class algebra(polygnomeObject.polygnomeObject):
+from collections import namedtuple
+
+
+# import polygnomeObject
+# import abstractPolynomial
+
+
+    # def doesAct(self,poly): #some iterable containing symbols
+        # poly = poly.changeAlgebra(None)
+        # return (poly - self.LHS).isZero()
+
+    # def act(self,poly):
+        # if self.doesAct(poly):
+            # return self.RHS
+        # else:
+            # return poly
+
+class algebra(abstractAlgebra.abstractAlgebra):
     """
     File: algebra.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
     Github: https://github.com/chriscampbell19
-    Description: An algebra is basically a container for relations, so that polynomials know where they live.
+    Description: An algebra stores a list of relations and can reduce words in
+    the free algebra by these relations. The relations have a choice of highest monomial already.
     """
-    def __init__(self,relations=None):
-        if relations is None:
-            relations =()
+    def __init__(self,relations=()):
         if isinstance(relations,relation.relation):
             relations = (relations,)
-        assert isinstance(relations,tuple)
+
+        if not isinstance(relations,tuple):
+            raise TypeError("Expected relations")
+        if len(relations) > 0 and isinstance(relations[0],tuple):
+            assert len(relations[0]) == 2
+            relations = map(lambda x: relation.relation( *x),relations)
+
         for i in relations:
             assert isinstance(i,relation.relation)
         self.relations = relations
@@ -32,7 +54,7 @@ class algebra(polygnomeObject.polygnomeObject):
             yield i
 
     def doesAct(self,poly): #Assumes degree 2 relations
-        """Test is the polynomial has any monomial on which there is a relation that acts"""
+        """Test if the polynomial has any monomial on which there is a relation that acts"""
         for mono in poly:
             n = mono.degree()
             if n <= 1:
@@ -55,10 +77,18 @@ class algebra(polygnomeObject.polygnomeObject):
                         return reductionFunction.reductionFunction(mono.submonomial(0,a),i,mono.submonomial(a+2,n))
 
 
-    def canonicalProjection(self,poly):
-        return poly.changeAlgebra(self)
+    def makeReductionSequence(self,poly):
+        sequence = []
+        while self.doesAct(poly):
+            reduction = self.makeReductionFunction(poly)
+            sequence.append(reduction)
+            poly = reduction(poly)
+        return sequence
 
-
+    def reduce(self,poly): # TODO: check running time on this, this is a slow way of doing it
+        for i in self.makeReductionSequence(poly):
+            poly = i(poly)
+        return poly
 
 
 if __name__ == '__main__':

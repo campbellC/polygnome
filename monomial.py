@@ -108,9 +108,12 @@ class monomial(abstractPolynomial.abstractPolynomial):
         if self.isZero():
             return "0"
         elif self.degree() == 0:
-            return self.coefficient.__repr__()
+            return repr(self.coefficient)
         else:
-            return self.coefficient.__repr__() + '*' + ''.join(self.generators)
+            coefficientJoiner = '*'
+            if self.coefficient == -1:
+                coefficientJoiner = ''
+            return repr(self.coefficient) + coefficientJoiner + ''.join(self.generators)
 
     def toLatex(self):
         if self.isZero():
@@ -120,7 +123,14 @@ class monomial(abstractPolynomial.abstractPolynomial):
         else:
             temp = map(lambda x: re.match(monomial.generatorRE, x), self.generators)
             temp = map( lambda x: x.group('letter') + '_{' + x.group('digits')+ '}', temp)
-            return self.coefficient.toLatex() + '*' + ''.join(temp)
+            coefficientJoiner = '*'
+            if self.coefficient == -1:
+                coefficientJoiner = ''
+            return self.coefficient.toLatex() + coefficientJoiner + ''.join(temp)
+
+
+def generators(inString):
+    return map(lambda x: monomial(1,x),inString.split(' '))
 
 
 
