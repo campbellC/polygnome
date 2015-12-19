@@ -1,6 +1,9 @@
 import abstractTensor
 import pureTensor
-class tensor(abstractTensor.abstractTensor):
+import composite
+
+
+class tensor(abstractTensor.abstractTensor,composite.composite):
     """
     File: tensor.py
     Author: Chris Campbell
@@ -15,46 +18,55 @@ class tensor(abstractTensor.abstractTensor):
     ######  CONSTRUCTORS
     ##############################################################################
 
-    def __init__(self,pureTensors=()):
-        if isinstance(pureTensors, pureTensor.pureTensor):
-            pureTensors= (pureTensors,)
+    def __init__(self,polynomials=()):
+        pureTensors = ()
+        if isinstance(polynomials, pureTensor.pureTensor):
+            pureTensors = (polynomials,)
+        if len(polynomials) > 1:
+            if isinstance(polynomials[0], pureTensor.pureTensor):
+                pureTensors = polynomials
+            else:
+
+                def pureTensorHelper(polynomials):
+                    assert len(polynomials) > 0
+                    for i in polynomials:
+                        if i.isZero():
+                            return tensor()
+
+                    pureTensors = []
+                    if len(polynomials) == 1:
+                        for mono in polynomials[0]:
+                            pureTensors.append(pureTensor.pureTensor( (mono,) ))
+                    else:
+                        tempTensors = pureTensorHelper(polynomials[1:])
+                        for mono in polynomials[0]:
+                            for pT in tempTensors:
+                                pureTensors.append(pureTensor.pureTensor( (mono,) ).tensorProduct(pT))
+
+                    return tuple(pureTensors)
+
+                pureTensors = pureTensorHelper(polynomials)
 
         assert isinstance(pureTensors,tuple)
+        composite.composite.__init__(self,pureTensors)
         self.pureTensors= pureTensors
 
 
     ##############################################################################
     ######  SORTING METHODS
     ##############################################################################
-    def __iter__(self):
-        for pT in self.pureTensors:
-            yield pT
 
     def clean(self):
-        self.pureTensors = map(lambda x: x.clean(),self.pureTensors)
-        newpTs = []
-        for index, pT in enumerate(self): #iterate through pTmials
-            for j in newpTs: #check if we've seen this before
-                if pT.isAddable(j):
-                    break
-            else: # if we haven't seen this before, take all of the pTmials with
-                # the same generators and add them all together
-                for index2, pT2 in enumerate(self):
-                    if index >= index2:
-                        continue
-                    else:
-                        if pT.isAddable(pT2):
-                            pT = pT + pT2
-                newpTs.append(pT)
-        newpTs = filter(lambda x: not x.isZero(), newpTs)
-        return tensor(tuple(newpTs))
+        return self._clean(tensor)
 
     ##############################################################################
     ######  MATHEMATICAL METHODS
     ##############################################################################
+    def __iter__(self):
+        return composite.composite.__iter__(self)
+
     def isZero(self):
-        other = self.clean()
-        return len(other.pureTensors)
+        return composite.composite.isZero(self)
 
     def __mul__(self,other):
         if len(self.pureTensors) == 0:
@@ -84,14 +96,13 @@ class tensor(abstractTensor.abstractTensor):
 
 
 
-    ##########################################################################################################################################################
-    ################################################################## polygnomeObject methods  ##################################################################
-    ##########################################################################################################################################################
+
+    ##############################################################################
+    ######  PRINTING AND TYPING
+    ##############################################################################
+
     def __repr__(self):
-        if self.isZero():
-            return "0"
-        return "+".join(repr(x) for x in self.pureTensors)
+        return composite.composite.__repr__(self)
 
-
-
-
+    def toLatex(self):
+        return composite.composite.toLatex(self)

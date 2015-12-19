@@ -1,8 +1,8 @@
 import abstractPolynomial
 import monomial
 import coefficient
-
-class polynomial(abstractPolynomial.abstractPolynomial):
+import composite
+class polynomial(abstractPolynomial.abstractPolynomial,composite.composite):
     """
     File: polynomial.py
     Author: Chris Campbell
@@ -19,6 +19,7 @@ class polynomial(abstractPolynomial.abstractPolynomial):
             monomials = (monomials,)
 
         assert isinstance(monomials,tuple)
+        composite.composite.__init__(self,monomials)
         self.monomials = monomials
 
 
@@ -26,36 +27,19 @@ class polynomial(abstractPolynomial.abstractPolynomial):
     ##############################################################################
     ######  SORTING METHODS
     ##############################################################################
-    def __iter__(self):
-        for i in self.monomials:
-            yield i
-
 
     def clean(self):
-        newMonos = []
-        for index, mono in enumerate(self): #iterate through monomials
-            for j in newMonos: #check if we've seen this before
-                if mono.isAddable(j):
-                    break
-            else: # if we haven't seen this before, take all of the monomials with
-                # the same generators and add them all together
-                for index2, mono2 in enumerate(self):
-                    if index >= index2:
-                        continue
-                    else:
-                        if mono.isAddable(mono2):
-                            mono = mono + mono2
-                newMonos.append(mono.clean())
-        newMonos = filter(lambda x: not x.isZero(), newMonos)
-        return polynomial(tuple(newMonos))
+        return self._clean(polynomial)
 
     ##############################################################################
     ######  MATHEMATICAL METHODS
     ##############################################################################
 
+    def __iter__(self):
+        return composite.composite.__iter__(self)
+
     def isZero(self):
-        other = self.clean()
-        return len(other.monomials) == 0
+        return composite.composite.isZero(self)
 
     def __mul__(self,other):
         if len(self.monomials) == 0:
@@ -102,14 +86,10 @@ class polynomial(abstractPolynomial.abstractPolynomial):
     ##############################################################################
 
     def __repr__(self):
-        if self.isZero():
-            return '0'
-        return "+".join(x.__repr__() for x in self if not x.isZero())
+        return composite.composite.__repr__(self)
 
     def toLatex(self):
-        if self.isZero():
-            return "0"
-        return "+".join(x.toLatex() for x in self if not x.isZero())
+        return composite.composite.toLatex(self)
 
 if __name__ == '__main__':
     x1 = monomial.monomial(1,'x1')

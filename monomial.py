@@ -47,6 +47,9 @@ class monomial(abstractPolynomial.abstractPolynomial):
         newGens = self.generators[a:b]
         return monomial(coefficient.coefficient(1),newGens)
 
+    def withCoefficientOf1(self):
+        return self.submonomial(0, len(self.generators))
+
     def __iter__(self):
         yield self
 
@@ -110,6 +113,8 @@ class monomial(abstractPolynomial.abstractPolynomial):
         elif self.degree() == 0:
             return repr(self.coefficient)
         else:
+            if self.coefficient == 1:
+                return ''.join(self.generators)
             coefficientJoiner = '*'
             if self.coefficient == -1:
                 coefficientJoiner = ''
