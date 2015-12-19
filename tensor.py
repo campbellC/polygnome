@@ -24,7 +24,7 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
             pureTensors = (polynomials,)
         if len(polynomials) >= 1:
             if isinstance(polynomials[0], pureTensor.pureTensor):
-                pureTensors = polynomials
+                pureTensors = tuple(polynomials)
             else:
 
                 def pureTensorHelper(polynomials):

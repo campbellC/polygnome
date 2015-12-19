@@ -73,7 +73,7 @@ class pureTensor(abstractTensor.abstractTensor):
     def __mul__(self,other):
         if self.isZero():
             return self
-        newMonos = self.monomials[:-1] + self.monomials[-1] * other
+        newMonos = self.monomials[:-1] + (self.monomials[-1] * other,)
         return pureTensor(newMonos)
 
     def degree(self):

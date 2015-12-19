@@ -1,7 +1,9 @@
 from collections import namedtuple
 import polygnomeObject
+import coefficient
 
-class relation(namedtuple('relation',['leadingMonomial','lowerOrderTerms']),
+relationClass = namedtuple('relation',['leadingMonomial','lowerOrderTerms'])
+class relation(relationClass,
                polygnomeObject.polygnomeObject): # type definition: relation is
                                                 #a tuple with the leading monomial
                                                 # and the lower terms in the
@@ -13,14 +15,34 @@ class relation(namedtuple('relation',['leadingMonomial','lowerOrderTerms']),
     Github: https://github.com/chriscampbell19
     Description:A relation is a tuple with the leadingMonomial and lowerOrderTerms.
     """
+
     def __repr__( self):
-        return repr(self.leadingMonomial - self.lowerOrderTerms)
+        return '(' + repr(self.leadingMonomial - self.lowerOrderTerms) + ')'
 
     def toLatex(self):
-        return (self.leadingMonomial - self.lowerOrderTerms).toLatex()
+        return '(' + (self.leadingMonomial - self.lowerOrderTerms).toLatex() + ')'
 
     def doesAct(self,poly):
         return poly == self.leadingMonomial
 
     def degree(self):
         return self.leadingMonomial.degree()
+
+    ##############################################################################
+    ######  CODE TO MAKE THIS USEABLE IN TENSOR PRODUCTS
+    ##############################################################################
+    def __init__(self,*args,**kwargs):
+        relationClass.__init__(self,args,kwargs)
+        self.coefficient = coefficient.coefficient(1)
+
+    def clean(self):
+        return self
+
+    def isZero(self):
+        return False
+
+    def __iter__(self):
+        yield self
+
+    def withCoefficientOf1(self):
+        return self
