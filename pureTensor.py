@@ -37,7 +37,7 @@ class pureTensor(abstractTensor.abstractTensor):
             return False
 
     def clean(self):
-        newCoefficient = reduce(lambda x,y: x * y, [x.coefficient for x in self.monomials])
+        newCoefficient = reduce(lambda x,y: x * y, [x.coefficient for x in self.monomials], self.coefficient)
         if newCoefficient.isZero():
             return pureTensor()
 
@@ -64,7 +64,7 @@ class pureTensor(abstractTensor.abstractTensor):
         if isinstance(other,pureTensor):
             if new1.isAddable(other):
                 newCoefficient = new1.coefficient + other.coefficient
-                return pureTensor(newCoefficient,self.monomials)
+                return pureTensor(self.monomials,newCoefficient)
             else:
                 return tensor.tensor((new1,other))
         else:

@@ -22,7 +22,7 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
         pureTensors = ()
         if isinstance(polynomials, pureTensor.pureTensor):
             pureTensors = (polynomials,)
-        if len(polynomials) > 1:
+        if len(polynomials) >= 1:
             if isinstance(polynomials[0], pureTensor.pureTensor):
                 pureTensors = polynomials
             else:
