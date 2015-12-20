@@ -10,7 +10,6 @@ class monomial(abstractPolynomial.abstractPolynomial):
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
     Github: https://github.com/chriscampbell19
     Description: A monomial is basically a coefficient and a tuple of generators.
-    The coefficient can change if you call sort, but otherwise it is immutable.
     """
     ##############################################################################
     ######  CONSTRUCTORS
@@ -45,7 +44,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
         assert 0 <= a <= len(self.generators)
         assert a <= b <= len(self.generators)
         newGens = self.generators[a:b]
-        return monomial(coefficient.coefficient(1),newGens)
+        return monomial(1,newGens)
 
     def withCoefficientOf1(self):
         return self.submonomial(0, len(self.generators))
