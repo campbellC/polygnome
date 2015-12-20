@@ -26,7 +26,6 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
             if isinstance(polynomials[0], pureTensor.pureTensor):
                 pureTensors = tuple(polynomials)
             else:
-
                 def pureTensorHelper(polynomials):
                     assert len(polynomials) > 0
                     for i in polynomials:
@@ -84,12 +83,14 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
 
 
     def __add__(self,other):
-        if isinstance(other,tensor):
-            newPTs = self.pureTensors + other.pureTensors
-            return tensor(newPTs).clean()
+        if isinstance(other,abstractTensor.abstractTensor):
+            newPTs = []
+            for i in self:
+                newPTs.append(i)
+            for i in other:
+                newPTs.append(i)
+            return tensor(tuple(newPTs)).clean()
 
-        if isinstance(other,pureTensor.pureTensor):
-            return self + tensor(other)
         else:
             return NotImplemented
 

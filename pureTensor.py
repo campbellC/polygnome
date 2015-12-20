@@ -1,7 +1,7 @@
 import abstractTensor
 import tensor
 import coefficient
-
+import monomial #TODO: remove this ugly breaking of encapsulation
 class pureTensor(abstractTensor.abstractTensor):
     """
     File: pureTensor.py
@@ -16,7 +16,8 @@ class pureTensor(abstractTensor.abstractTensor):
     ######  CONSTRUCTORS
     ##############################################################################
     def __init__(self, monomials=(), coeff=coefficient.coefficient(1)):
-
+        if isinstance(monomials, monomial.monomial):
+            monomials = (monomials, )
         self.coefficient = coeff
         for i in monomials:
             self.coefficient = self.coefficient * i.coefficient
@@ -74,14 +75,33 @@ class pureTensor(abstractTensor.abstractTensor):
         if self.isZero():
             return self
         newMonos = self.monomials[:-1] + (self.monomials[-1] * other,)
-        return pureTensor(newMonos)
+        return pureTensor(newMonos,self.coefficient).clean()
+
+    def __rmul__(self,other):
+        if self.isZero():
+            return self
+        newMonos = (other * self.monomials[0],) + self.monomials[1:]
+        return pureTensor(newMonos,self.coefficient).clean()
 
     def degree(self):
         return reduce(lambda x,y: x+ y, self.monomials)
 
     def tensorProduct(self,other):
-        assert isinstance(other, pureTensor)
+        if not isinstance(other, pureTensor):
+            other = pureTensor( (other,) )
         return pureTensor(self.monomials + other.monomials, self.coefficient * other.coefficient)
+
+    def subTensor(self,a,b):
+        assert 0 <= a<= len(self)
+        assert a <= b<= len(self)
+        new = self.clean().monomials[a:b]
+        return pureTensor(new)
+
+    def __getitem__(self,index):
+        return self.monomials[index]
+
+    def __len__(self):
+        return len(self.monomials)
     ##############################################################################
     ######  PRINTING AND TYPING
     ##############################################################################
