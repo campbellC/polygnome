@@ -17,8 +17,7 @@ class polynomial(abstractPolynomial.abstractPolynomial,composite.composite):
     def __init__(self,monomials=()):
         if isinstance(monomials, monomial.monomial):
             monomials = (monomials,)
-
-        assert isinstance(monomials,tuple)
+        monomials = tuple(monomials)
         composite.composite.__init__(self,monomials)
         self.monomials = monomials
 
@@ -42,18 +41,18 @@ class polynomial(abstractPolynomial.abstractPolynomial,composite.composite):
         return composite.composite.isZero(self)
 
     def __mul__(self,other):
-        if len(self.monomials) == 0:
+        if len(self) == 0:
             return self
         if isinstance(other,monomial.monomial) or (type(other) in [str,float,int]) or isinstance(other,coefficient.coefficient):
             newMonos = []
-            for i in self.monomials:
+            for i in self:
                 newMonos.append(i * other)
             return polynomial(tuple(newMonos)).clean()
         if isinstance(other,polynomial):
             if len(other.monomials) == 0:
                 return other
             newMonos = []
-            for mono1 in self.monomials:
+            for mono1 in self:
                 for mono2 in other.monomials:
                     newMonos.append(mono1 * mono2)
             return polynomial(tuple(newMonos)).clean()
@@ -70,14 +69,12 @@ class polynomial(abstractPolynomial.abstractPolynomial,composite.composite):
             return NotImplemented
 
     def __add__(self,other):
-        if isinstance(other,polynomial):
-            newMonos = self.monomials + other.monomials
-            return polynomial(newMonos).clean()
+        if isinstance(other,abstractPolynomial.abstractPolynomial):
+            return composite.composite.add(self,other,polynomial)
 
-        if isinstance(other,monomial.monomial):
-            return self + polynomial(other)
         elif (type(other) in [str,float,int]) or isinstance(other,coefficient.coefficient):
             return self + monomial.monomial(other)
+
         else:
             return NotImplemented
 

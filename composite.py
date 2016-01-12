@@ -23,9 +23,9 @@ class composite(polygnomeObject.polygnomeObject):
 
     def _clean(self,constructor):
         currentComponents = map(lambda x: x.clean(),self.components)
-        newcomponents = []
+        newComponents = []
         for index, component in enumerate(currentComponents): #iterate through components
-            for j in newcomponents: #check if we've seen this before
+            for j in newComponents: #check if we've seen this before
                 if component.isAddable(j):
                     break
             else: # if we haven't seen this before, take all of the componentmials with
@@ -36,9 +36,19 @@ class composite(polygnomeObject.polygnomeObject):
                     else:
                         if component.isAddable(component2):
                             component = component + component2
-                newcomponents.append(component)
-        newcomponents = filter(lambda x: not x.isZero(), newcomponents)
-        return constructor(tuple(newcomponents))
+                newComponents.append(component)
+        newComponents = filter(lambda x: not x.isZero(), newComponents)
+        return constructor(tuple(newComponents))
+
+    def __len__(self):
+        return len(self.components)
+    ##############################################################################
+    ######  MATHEMATICAL METHODS
+    ##############################################################################
+
+    def add(self,other,constructor):
+        newComponents = [x for x in self] + [x for x in other]
+        return constructor(newComponents).clean()
 
     ##############################################################################
     ######  PRINTING AND TYPING

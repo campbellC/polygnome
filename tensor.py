@@ -11,8 +11,6 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
     Github: https://github.com/chriscampbell19
     Description: A composite class of pureTensors
     """
-    # TODO: This is almost exactly the same code as polynomial. Need to abstract
-    # this relationship
 
     ##############################################################################
     ######  CONSTRUCTORS
@@ -68,29 +66,23 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
         return composite.composite.isZero(self)
 
     def __mul__(self,other):
-        if len(self.pureTensors) == 0:
+        if len(self) == 0:
             return self
         else:
-            return tensor( map(lambda x: x * other, self.pureTensors))
+            return tensor( map(lambda x: x * other, self))
 
 
     def __rmul__(self,other):
-        if len(self.pureTensors) == 0:
+        if len(self) == 0:
             return self
         else:
-            return tensor( map(lambda x:  other * x, self.pureTensors))
+            return tensor( map(lambda x:  other * x, self))
 
 
 
     def __add__(self,other):
         if isinstance(other,abstractTensor.abstractTensor):
-            newPTs = []
-            for i in self:
-                newPTs.append(i)
-            for i in other:
-                newPTs.append(i)
-            return tensor(tuple(newPTs)).clean()
-
+            return composite.composite.add(self,other,tensor)
         else:
             return NotImplemented
 
