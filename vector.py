@@ -18,10 +18,6 @@ class vector(arithmeticInterface.arithmeticInterface):
         newComponents = [x.clean() for x in self.components]
         return vector(tuple(newComponents))
 
-    def __iter__(self):
-        for i in self.components:
-            yield i
-
     def __mul__(self,other):
         newComponents = []
         for i in self.components:
@@ -38,12 +34,24 @@ class vector(arithmeticInterface.arithmeticInterface):
     def __len__(self):
         return len(self.components)
 
+    def __getitem__(self,index):
+        if index > len(self):
+            raise IndexError
+        return self.components[index]
+
     def isZero(self):
         for i in self:
             if not i.isZero():
                 return False
         else:
             return True
+
+    def reduceWithRespectTo(self,alg):
+        newComponents = []
+        for poly in self:
+            newComponents.append(alg.reduce(poly))
+        return vector(newComponents)
+
     ##############################################################################
     ######  PRINTING AND TYPING
     ##############################################################################

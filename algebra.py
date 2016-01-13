@@ -85,7 +85,7 @@ class algebra(abstractAlgebra.abstractAlgebra):
             poly = reduction(poly)
         return sequence
 
-    def reduce(self,poly): # TODO: check running time on this, this is a slow way of doing it
+    def reduce(self,poly): # TODO: check running time on this, this is a slow way of doing iterable
         for i in self.makeReductionSequence(poly):
             poly = i(poly)
         return poly

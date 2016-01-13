@@ -21,7 +21,8 @@ class composite(polygnomeObject.polygnomeObject):
         other = self.clean()
         return len(other.components) == 0
 
-    def _clean(self,constructor):
+
+    def clean(self):
         currentComponents = map(lambda x: x.clean(),self.components)
         newComponents = []
         for index, component in enumerate(currentComponents): #iterate through components
@@ -38,7 +39,7 @@ class composite(polygnomeObject.polygnomeObject):
                             component = component + component2
                 newComponents.append(component)
         newComponents = filter(lambda x: not x.isZero(), newComponents)
-        return constructor(tuple(newComponents))
+        return type(self)(tuple(newComponents))
 
     def __len__(self):
         return len(self.components)
@@ -46,9 +47,9 @@ class composite(polygnomeObject.polygnomeObject):
     ######  MATHEMATICAL METHODS
     ##############################################################################
 
-    def add(self,other,constructor):
+    def __add__(self,other):
         newComponents = [x for x in self] + [x for x in other]
-        return constructor(newComponents).clean()
+        return (type(self)(newComponents)).clean()
 
     ##############################################################################
     ######  PRINTING AND TYPING

@@ -3,7 +3,7 @@ import pureTensor
 import composite
 
 
-class tensor(abstractTensor.abstractTensor,composite.composite):
+class tensor(composite.composite,abstractTensor.abstractTensor):
     """
     File: tensor.py
     Author: Chris Campbell
@@ -49,21 +49,11 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
         self.pureTensors= pureTensors
 
 
-    ##############################################################################
-    ######  SORTING METHODS
-    ##############################################################################
-
-    def clean(self):
-        return self._clean(tensor)
 
     ##############################################################################
     ######  MATHEMATICAL METHODS
     ##############################################################################
-    def __iter__(self):
-        return composite.composite.__iter__(self)
 
-    def isZero(self):
-        return composite.composite.isZero(self)
 
     def __mul__(self,other):
         if len(self) == 0:
@@ -82,7 +72,7 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
 
     def __add__(self,other):
         if isinstance(other,abstractTensor.abstractTensor):
-            return composite.composite.add(self,other,tensor)
+            return composite.composite.__add__(self,other)
         else:
             return NotImplemented
 
@@ -90,12 +80,3 @@ class tensor(abstractTensor.abstractTensor,composite.composite):
 
 
 
-    ##############################################################################
-    ######  PRINTING AND TYPING
-    ##############################################################################
-
-    def __repr__(self):
-        return composite.composite.__repr__(self)
-
-    def toLatex(self):
-        return composite.composite.toLatex(self)

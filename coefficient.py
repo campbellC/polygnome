@@ -17,7 +17,10 @@ class coefficient(arithmeticInterface.arithmeticInterface):
             coeffs = {'' : coeffs}
 
         elif type(coeffs) is str:
-            coeffs = {coeffs : 1}
+            if coeffs[0] == '-':
+                coeffs = {coeffs[1:] : -1}
+            else:
+                coeffs = {coeffs : 1}
 
         elif coeffs is None:
             coeffs = {'' : 1}
@@ -119,7 +122,12 @@ class coefficient(arithmeticInterface.arithmeticInterface):
         else:
             return NotImplemented
 
+    def __getitem__(self,index):
+        return self.coeffs[index]
 
+    def __iter__(self):
+        for i in self.coeffs:
+            yield i
     ##############################################################################
     ######  PRINTING AND TYPING
     ##############################################################################
@@ -138,7 +146,8 @@ class coefficient(arithmeticInterface.arithmeticInterface):
             ret += "+".join( str(self.coeffs[i])+i if (self.coeffs[i]!=1 and self.coeffs[i]!=0 and self.coeffs[i]!=-1)\
                             else i if (self.coeffs[i] == 1 and i != "")\
                             else str(1) if self.coeffs[i] == 1\
-                            else "-"+i if self.coeffs[i] == -1\
+                            else "-"+i if self.coeffs[i] == -1 and i!= ''\
+                            else '-1' if self.coeffs[i] == -1\
                             else "0" for i in self.coeffs)
 
             if not bracketFlag:

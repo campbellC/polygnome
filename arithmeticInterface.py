@@ -45,3 +45,11 @@ class arithmeticInterface(polygnomeObject.polygnomeObject):
 
     def __radd__(self,other): #addition is always commutative
         return self + other
+
+    def __pow__(self,other):
+        assert type(other) is int
+        assert other >= 0
+        if other == 0:
+            return 1
+        else:
+            return self * (self ** (other - 1 ))

@@ -114,10 +114,9 @@ class monomial(abstractPolynomial.abstractPolynomial):
         else:
             if self.coefficient == 1:
                 return ''.join(self.generators)
-            coefficientJoiner = '*'
             if self.coefficient == -1:
-                coefficientJoiner = ''
-            return repr(self.coefficient) + coefficientJoiner + ''.join(self.generators)
+                return '-' + ''.join(self.generators)
+            return repr(self.coefficient) + ''.join(self.generators)
 
     def toLatex(self):
         if self.isZero():

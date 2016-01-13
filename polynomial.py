@@ -2,13 +2,13 @@ import abstractPolynomial
 import monomial
 import coefficient
 import composite
-class polynomial(abstractPolynomial.abstractPolynomial,composite.composite):
+class polynomial(composite.composite,abstractPolynomial.abstractPolynomial):
     """
     File: polynomial.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
     Github: https://github.com/chriscampbell19
-    Description: The polynomial class is mainly a container for monomials.
+    Description: The polynomial class composite class for abstractPolynomials.
     """
     ##############################################################################
     ######  CONSTRUCTORS
@@ -23,24 +23,13 @@ class polynomial(abstractPolynomial.abstractPolynomial,composite.composite):
 
 
 
-    ##############################################################################
-    ######  SORTING METHODS
-    ##############################################################################
-
-    def clean(self):
-        return self._clean(polynomial)
 
     ##############################################################################
     ######  MATHEMATICAL METHODS
     ##############################################################################
 
-    def __iter__(self):
-        return composite.composite.__iter__(self)
 
-    def isZero(self):
-        return composite.composite.isZero(self)
-
-    def __mul__(self,other):
+    def __mul__(self, other):
         if len(self) == 0:
             return self
         if isinstance(other,monomial.monomial) or (type(other) in [str,float,int]) or isinstance(other,coefficient.coefficient):
@@ -70,7 +59,7 @@ class polynomial(abstractPolynomial.abstractPolynomial,composite.composite):
 
     def __add__(self,other):
         if isinstance(other,abstractPolynomial.abstractPolynomial):
-            return composite.composite.add(self,other,polynomial)
+            return composite.composite.__add__(self,other)
 
         elif (type(other) in [str,float,int]) or isinstance(other,coefficient.coefficient):
             return self + monomial.monomial(other)
@@ -78,15 +67,6 @@ class polynomial(abstractPolynomial.abstractPolynomial,composite.composite):
         else:
             return NotImplemented
 
-    ##############################################################################
-    ######  PRINTING AND TYPING
-    ##############################################################################
-
-    def __repr__(self):
-        return composite.composite.__repr__(self)
-
-    def toLatex(self):
-        return composite.composite.toLatex(self)
 
 if __name__ == '__main__':
     x1 = monomial.monomial(1,'x1')
