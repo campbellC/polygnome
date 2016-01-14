@@ -71,6 +71,8 @@ class tensor(composite.composite,abstractTensor.abstractTensor):
 
 
     def __add__(self,other):
+        if other == 0:
+            return self
         if isinstance(other,abstractTensor.abstractTensor):
             return composite.composite.__add__(self,other)
         else:

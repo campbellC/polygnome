@@ -16,9 +16,15 @@ class pureTensor(abstractTensor.abstractTensor):
     ######  CONSTRUCTORS
     ##############################################################################
     def __init__(self, monomials=(), coeff=coefficient.coefficient(1)):
-        if isinstance(monomials, monomial.monomial):
-            monomials = (monomials, )
+        if type(monomials) not in [list,tuple]:
+            monomials = (monomials,)
+        monomials= tuple(monomials)
         self.coefficient = coeff
+        index = 0
+        while index < len(monomials):
+            if type(monomials[index]) in [coefficient.coefficient,int,float]:
+                monomials = monomials[:index] + (monomial.monomial(monomials[index]),) + monomials[index+1:]
+            index +=1
         for i in monomials:
             self.coefficient = self.coefficient * i.coefficient
 
@@ -49,23 +55,23 @@ class pureTensor(abstractTensor.abstractTensor):
         yield self
 
     def isAddable(self,other):
-        new1 = self.clean()
-        new2 = other.clean()
-
-        if new1.isZero() or new2.isZero():
+        if self.isZero() or other.isZero():
             return True
-
-
         else:
-            return new1.monomials == new2.monomials
+            return self.monomials == other.monomials
 
     def __add__(self,other ):
+        if other == 0:
+            return self
         new1 = self.clean()
         other = other.clean()
         if isinstance(other,pureTensor):
             if new1.isAddable(other):
-                newCoefficient = new1.coefficient + other.coefficient
-                return pureTensor(self.monomials,newCoefficient)
+                if self.isZero():
+                    return other
+                else:
+                    newCoefficient = new1.coefficient + other.coefficient
+                    return pureTensor(self.monomials,newCoefficient)
             else:
                 return tensor.tensor((new1,other))
         else:
@@ -111,10 +117,12 @@ class pureTensor(abstractTensor.abstractTensor):
         if self.isZero():
             return "0"
         else:
-            coefficientJoiner = '*'
             if self.coefficient == -1:
-                coefficientJoiner = ''
-            return repr(self.coefficient) + coefficientJoiner + '|'.join([repr(x) for x in self.monomials])
+                return '-' + '|'.join([repr(x) for x in self.monomials])
+            elif self.coefficient == 1:
+                return '|'.join([repr(x) for x in self.monomials])
+            else:
+                return repr(self.coefficient) + '*' + '|'.join([repr(x) for x in self.monomials])
 
     def toLatex(self):
         if self.isZero():

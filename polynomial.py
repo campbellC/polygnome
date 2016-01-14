@@ -68,6 +68,7 @@ class polynomial(composite.composite,abstractPolynomial.abstractPolynomial):
             return NotImplemented
 
 
+
 if __name__ == '__main__':
     x1 = monomial.monomial(1,'x1')
     x2 = monomial.monomial(1,'x2')

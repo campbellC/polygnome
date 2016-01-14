@@ -23,7 +23,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
 
         if type(generators) is str:
             generators = (generators,)
-        assert isinstance(generators, tuple)
+        generators = tuple(generators)
         for i in generators:
             assert re.match(monomial.generatorRE,i)
         self.coefficient = coeff.clean()
@@ -40,11 +40,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
 
 
     def submonomial(self,a,b): #returns the monomial from position a to position b (right hand open). e.g. xy._submonomial(0,1) = x. sets coefficient to one
-
-        assert 0 <= a <= len(self.generators)
-        assert a <= b <= len(self.generators)
-        newGens = self.generators[a:b]
-        return monomial(1,newGens)
+        return self[a:b]
 
     def withCoefficientOf1(self):
         return self.submonomial(0, len(self.generators))
@@ -52,6 +48,10 @@ class monomial(abstractPolynomial.abstractPolynomial):
     def __iter__(self):
         yield self
 
+    def __getitem__(self,index):
+        if isinstance(index,slice):
+            return monomial(1,self.generators[index])
+        return monomial(1,[self.generators[index]])
     ##############################################################################
     ######  MATHEMATICAL METHODS
     ##############################################################################
@@ -84,8 +84,6 @@ class monomial(abstractPolynomial.abstractPolynomial):
             return self + monomial(other)
         else:
             return NotImplemented
-
-
 
     def __mul__(self,other):
         if isinstance(other,monomial):
