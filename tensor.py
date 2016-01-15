@@ -46,7 +46,7 @@ class tensor(composite.composite,abstractTensor.abstractTensor):
 
         assert isinstance(pureTensors,tuple)
         composite.composite.__init__(self,pureTensors)
-        self.pureTensors= pureTensors
+        self.pureTensors= self.components
 
 
 

@@ -15,6 +15,10 @@ class relation(relationClass,
     Github: https://github.com/chriscampbell19
     Description:A relation is a tuple with the leadingMonomial and lowerOrderTerms.
     """
+    def __init__(self,*args,**kwargs):
+        relationClass.__init__(self,args,kwargs)
+        self.coefficient = coefficient.coefficient(1)
+
     def __repr__( self):
         return '(' + repr(self.leadingMonomial - self.lowerOrderTerms) + ')'
 
@@ -33,9 +37,6 @@ class relation(relationClass,
     ##############################################################################
     ######  CODE TO MAKE THIS USEABLE IN TENSOR PRODUCTS
     ##############################################################################
-    def __init__(self,*args,**kwargs):
-        relationClass.__init__(self,args,kwargs)
-        self.coefficient = coefficient.coefficient(1)
 
     def clean(self):
         return self

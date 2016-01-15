@@ -19,7 +19,7 @@ class polynomial(composite.composite,abstractPolynomial.abstractPolynomial):
             monomials = (monomials,)
         monomials = tuple(monomials)
         composite.composite.__init__(self,monomials)
-        self.monomials = monomials
+        self.monomials = self.components
 
 
 
