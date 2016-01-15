@@ -113,3 +113,10 @@ def m_1(abc,alg):
         return answer
 
     return m_1Inner(abc)
+
+
+
+
+
+
+

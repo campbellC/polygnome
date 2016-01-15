@@ -34,14 +34,15 @@ class pureTensor(abstractTensor.abstractTensor):
     ######  MATHEMATICAL METHODS
     ##############################################################################
     def isZero(self):
-        if len(self.monomials) == 0:
+        new = self.clean()
+        if len(new.monomials) == 0:
             return True
 
-        for mono in self.monomials:
+        for mono in new.monomials:
             if mono.isZero():
                 return True
         else:
-            return False
+            return new.coefficient.isZero()
 
     def clean(self):
         newCoefficient = reduce(lambda x,y: x * y, [x.coefficient for x in self.monomials], self.coefficient)

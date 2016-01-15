@@ -27,7 +27,7 @@ class arithmeticInterface(polygnomeObject.polygnomeObject):
 
     def __eq__(self,other):
         x = self - other
-        x.clean()
+        x = x.clean()
         if x.isZero():
             return True
         else:

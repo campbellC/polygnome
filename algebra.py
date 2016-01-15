@@ -14,9 +14,7 @@ class algebra(polygnomeObject.polygnomeObject):
     def __init__(self,relations=()):
         if isinstance(relations,relation.relation):
             relations = (relations,)
-
-        if not isinstance(relations,tuple):
-            raise TypeError("Expected relations")
+        relations = tuple(relations)
         if len(relations) > 0 and isinstance(relations[0],tuple):
             assert len(relations[0]) == 2
             relations = map(lambda x: relation.relation( *x),relations)
