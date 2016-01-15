@@ -1,7 +1,7 @@
 import abstractTensor
 import tensor
 import coefficient
-import monomial #TODO: remove this ugly breaking of encapsulation
+import monomial
 class pureTensor(abstractTensor.abstractTensor):
     """
     File: pureTensor.py
