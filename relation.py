@@ -15,7 +15,6 @@ class relation(relationClass,
     Github: https://github.com/chriscampbell19
     Description:A relation is a tuple with the leadingMonomial and lowerOrderTerms.
     """
-
     def __repr__( self):
         return '(' + repr(self.leadingMonomial - self.lowerOrderTerms) + ')'
 
@@ -27,6 +26,9 @@ class relation(relationClass,
 
     def degree(self):
         return self.leadingMonomial.degree()
+
+    def __eq__(self,other):
+        return self.leadingMonomial == other.leadingMonomial and self.lowerOrderTerms == other.lowerOrderTerms
 
     ##############################################################################
     ######  CODE TO MAKE THIS USEABLE IN TENSOR PRODUCTS
