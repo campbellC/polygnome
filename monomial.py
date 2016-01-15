@@ -136,8 +136,4 @@ def generators(inString):
 
 
 if __name__ == '__main__':
-   x1 = monomial('q','x1')
-   print x1
-   x2 = monomial(1,'x2')
-   y = x2 * x1
-   print y.toLatex()
+    pass

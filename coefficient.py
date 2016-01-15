@@ -163,12 +163,4 @@ class coefficient(arithmeticInterface.arithmeticInterface):
 
 
 if __name__ == '__main__':
-    q = coefficient('q')
-    a1 = coefficient('a1')
-    zero = coefficient(0)
-
-    print q + zero
-    print q * zero
-    print q * 1
-    print q + a1
-    print (q+ a1).toLatex()
+    pass

@@ -70,12 +70,4 @@ class polynomial(composite.composite,abstractPolynomial.abstractPolynomial):
 
 
 if __name__ == '__main__':
-    x1 = monomial.monomial(1,'x1')
-    x2 = monomial.monomial(1,'x2')
-    y = x1*x2
-    z = x2*x1 *'q'
-    xy = y + z * z + y
-    print "xy=" , xy.toLatex()
-    print xy.clean()
-    print "xy ^ 2= " , (xy * xy).toLatex()
-    print xy-(xy + 'q') * 2
+    pass
