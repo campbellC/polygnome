@@ -1,211 +1,115 @@
-import pureTensor
-import tensor
-import monomial
-import polynomial
-import copy
-import coefficient
-import time
+from pureTensor import pureTensor
+import relation
+from tensor import tensor
+from monomial import monomial
+from tensorAlgebra import tensorAlgebra
+from algebra import algebra
 
-def barMap(tens):#for now assume this is above position 2, so the result is also a tensor
-    ten = copy.deepcopy(tens)
-    ret = copy.deepcopy(tens)
-    ten.sort()
-    if isinstance(ten,pureTensor.pureTensor):
-        assert len(ten.monos) > 1
-        for i in range(0,len(ten.monos)-1):
-            temp = ten.monos[i]*ten.monos[i+1]
-            if i == 0:
-                ret = pureTensor.pureTensor([temp] + ten.monos[2:],ten.coeff * pow(-1,i))
-            elif i == len(ten.monos) -2:
-                ret = ret + (pureTensor.pureTensor(ten.monos[:i] + [temp],ten.coeff * pow(-1,i)))
-            else:
-                ret = ret + (pureTensor.pureTensor(ten.monos[:i]+[temp]+ten.monos[i+2:], ten.coeff* pow(-1,i)))
-                        
-    if isinstance(ten,tensor.tensor):
-        flag = True
-        for i in ten.ps:
-            if flag:
-                ret = barMap(i)
-                flag = False
-            else:
-                ret = ret + barMap(i)
-    return ret
 
-def k2(tens):
-    assert isinstance(tens,tensor.tensor) or isinstance(tens,pureTensor.pureTensor)
-    ten = copy.deepcopy(tens)
-    ret = copy.deepcopy(tens)
-    if isinstance(ten,pureTensor.pureTensor):
-        assert isinstance(ten.monos[1],dict)
-        for i in ten.monos[1]:
-            ###### a's
-            a = copy.deepcopy(ten.monos[0])
-            a.vs = a.vs + [i[0]]
-            a1= copy.deepcopy(ten.monos[0])
-            a1.vs = a1.vs + [ten.monos[1][i][0]]
-            a2 = copy.deepcopy(ten.monos[0])
-            a3 = copy.deepcopy(ten.monos[0])
-            ###### b's
-            b = copy.deepcopy(ten.monos[2])
-            b1  = copy.deepcopy(ten.monos[2])
-            b2 = copy.deepcopy(ten.monos[2])
-            b2.vs = [i[1]] + b2.vs
-            b3  = copy.deepcopy(ten.monos[2])
-            b3.vs = [ten.monos[1][i][1]] + b3.vs
-            #######c's
-            c = copy.deepcopy(ten.monos[0])
-            c.vs = [i[1]]
-            c.coeff = coefficient.coefficient()
-            c1 = copy.deepcopy(ten.monos[0])
-            c1.vs = [ten.monos[1][i][1]]
-            c1.coeff = coefficient.coefficient()* pow(-1,1)
-            c2 = copy.deepcopy(ten.monos[0])
-            c2.vs = [i[0]]
-            c2.coeff = coefficient.coefficient() 
-            c3 = copy.deepcopy(ten.monos[0])
-            c3.vs = [ten.monos[1][i][0]]
-            c3.coeff = coefficient.coefficient()* pow(-1,1)
-            ret = pureTensor.pureTensor([a,c,b])
-            ret = ret + pureTensor.pureTensor([a1,c1,b1])
-            ret = ret + pureTensor.pureTensor([a2,c2,b2])
-            ret = ret + pureTensor.pureTensor([a3,c3,b3])
-            ret.sort()
-    if isinstance(ten,tensor.tensor):
-        flag = True
-        for i in ten.ps:
-            if flag:
-                ret = k2(i)
-                flag = False
-            else:
-                ret = ret + k2(i)
-            ret.sort()
-    return ret
+class bimoduleMapDecorator(object):
+    """
+    File: chainMaps.py
+    Author: Chris Campbell
+    Email: c (dot) j (dot)  campbell (at) ed (dot) ac (dot) uk
+    Github: https://github.com/chriscampbell19
+    Description: A decorator that extends a function defined on a tensor algebra bilinearly with respect to some algebra.
+    You must pass it the domain and codomain tensor algebras in order for it to reduce input and output for you.
+    """
+    def __init__(self, domain, codomain):
+        self.domain = domain
+        self.codomain = codomain
 
-    
-    
-    
-def m1(tens):
-    assert isinstance(tens,pureTensor.pureTensor) or isinstance(tens,tensor.tensor)
-    ten = copy.deepcopy(tens)
-    ten.sort()
-    ret = copy.deepcopy(tens)
-    if isinstance(tens,pureTensor.pureTensor):
-        assert tens.degree() == 3
-        if not ten.monos[0].isNum():
-            a = copy.deepcopy(ten.monos[0])
-            ten.monos[0].vs = []
-            return a * m1(ten)
-        elif not ten.monos[2].isNum():
-            b = copy.deepcopy(ten.monos[2])
-            ten.monos[2].vs = []
-            return m1(ten) * b
-        else:
-            for i in range(0,len(ten.monos[1].vs)):
-                a = copy.deepcopy(ten.monos[1])
-                a.vs = ten.monos[1].vs[0:i]
-                b = copy.deepcopy(ten.monos[1])
-                b.vs = [ten.monos[1].vs[i]]
-                c = copy.deepcopy(ten.monos[1])
-                c.vs = ten.monos[1].vs[i+1:]
-                if i ==0:
-                    ret = pureTensor.pureTensor([a,b,c],ten.coeff)
-                    assert isinstance(ret,pureTensor.pureTensor)
-                    for i in ret.monos:
-                        assert isinstance(i,monomial.monomial)
+    def __call__(self,func):
+        def wrapped_func(tens):
+            if tens == 0:
+                return tensor()
+            tens = tens.clean()
+            tens = self.domain.reduce(tens)
+            firstItem = True
+            for pure in tens:
+                left =pure[0]
+                right = pure[-1]
+                middle = pureTensor(1).tensorProduct(pure.subTensor(1,len(pure)-1)).tensorProduct(1)
+                if firstItem:
+                    answer = pure.coefficient * left * func(middle) * right
+                    firstItem = False
                 else:
-                    ret = ret + pureTensor.pureTensor([a,b,c],ten.coeff)
-                ret.sort()
-    if isinstance(ten,tensor.tensor):
-        flag = True
-        for i in ten.ps:
-            if flag:
-                ret = m1(i)
-                flag = False
-            else:
-                ret = ret + m1(i)
-            ret.sort()
-    return ret
-        
-        
-        
-###########################################################################################################################################################
-############################################################## EXPERIMENTS #############################################################################################
-###########################################################################################################################################################
+                    answer = answer + pure.coefficient * left * func(middle) * right
+            return self.codomain.reduce(answer)
+        return wrapped_func
 
+def b_n(tens,alg):
+    domain = tensorAlgebra([alg] * len(tens))
+    codomain = tensorAlgebra([alg] * (len(tens) - 1))
 
-
-def facMap(tens):
-    assert isinstance(tens,pureTensor.pureTensor) or isinstance(tens,tensor.tensor)
-    ten = copy.deepcopy(tens)
-    ret = copy.deepcopy(tens)
-   
-    if isinstance(ten,tensor.tensor):
-        flag = True
-        for i in ten.ps:
-            if flag:
-                ret = facMap(i)
-                flag = False
-            else:
-                ret = ret + facMap(i)
-            
-    if isinstance(ten,pureTensor.pureTensor):
-        assert tens.degree() == 4
-        if not ten.monos[0].isNum():
-            a = copy.deepcopy(ten.monos[0])
-            ten.monos[0].vs = []
-            return a * facMap(ten)
-        elif not ten.monos[3].isNum():
-            b = copy.deepcopy(ten.monos[3])
-            ten.monos[3].vs = []
-            return facMap(ten) * b
+    @bimoduleMapDecorator(domain,codomain)
+    def b_nInner(tens):
+        assert isinstance(tens, pureTensor)
+        assert len(tens) >= 2
+        tens = tens.clean()
+        if len(tens) == 2:
+            return tens[0] * tens[1]
         else:
-            x = tens.monos[1] * tens.monos[2]
-            ret = tensor.tensor([])
-            flag = True
-            for i in x.facSeq():
-                m = i[0]
-                j = i[1]
-                r = i[2]
-                a = copy.deepcopy(m)
-                a.vs = a.vs[:j]
-                b = copy.deepcopy(m)
-                b.vs = b.vs[j+2:]
-                if flag:
-                    ret = tensor.tensor([pureTensor.pureTensor([a,r,b])])
-                    flag = False
-                else:
-                    ret = ret + pureTensor.pureTensor([a,r,b])
-                
-    ret.sort()
-    return ret
-            
-            
+            answer = tens.subTensor(1,len(tens) )
+            answer = answer - pureTensor(1).tensorProduct(tens[1]*tens[2]).tensorProduct(tens.subTensor(3,len(tens)))
+            answer = answer + tens.subTensor(0,2).tensorProduct(b_n(tens.subTensor(2,len(tens)), alg))
+            return answer
+    return b_nInner(tens)
 
 
 
+def k_2(tens,alg):
+    freeAlgebra = algebra()
+    K1 = K2 = tensorAlgebra([alg,freeAlgebra,alg])
+
+    @bimoduleMapDecorator(K2,K1)
+    def k_2Inner(tens):
+        assert isinstance(tens,pureTensor)
+        answer= tensor()
+        rel =tens.monomials[1]
+        for i in rel.leadingMonomial:
+            answer = answer + i.coefficient * pureTensor((i.submonomial(0,1),i.submonomial(1,2),monomial(1)))
+            answer = answer + i.coefficient * pureTensor((monomial(1),i.submonomial(0,1),i.submonomial(1,2)))
+        for i in rel.lowerOrderTerms:
+            answer = answer - i.coefficient * pureTensor((i.submonomial(0,1),i.submonomial(1,2),monomial(1)))
+            answer = answer - i.coefficient * pureTensor((monomial(1),i.submonomial(0,1),i.submonomial(1,2)))
+        return answer
+    return k_2Inner(tens)
 
 
+def m_2(abcd,alg):
+    B2 = tensorAlgebra([alg]*4)
+    freeAlgebra = algebra()
+    K2 = tensorAlgebra([alg,freeAlgebra,alg])
+
+    @bimoduleMapDecorator(B2,K2)
+    def m_2Inner(PT):
+        assert isinstance(PT, pureTensor)
+        assert len(PT) == 4
+        PT = PT.clean()
+        w = PT[1] * PT[2]
+        answer = tensor()
+        sequence = alg.makeReductionSequence(w)
+        for reductionFunction, weight in sequence:
+            answer += PT.coefficient * weight * PT[0] \
+                * pureTensor([reductionFunction.leftMonomial,
+                              reductionFunction.relation,
+                              reductionFunction.rightMonomial]) * PT[3]
+        return answer
+
+    return m_2Inner(abcd)
 
 
+def m_1(abc,alg):
+    K1 = B1 = tensorAlgebra([alg]*3)
 
+    @bimoduleMapDecorator(B1,K1)
+    def m_1Inner(b):
+        b = b[1].clean()
+        answer = tensor()
+        if b.degree() != 0:
+            for i in range(b.degree()):
+                answer += b.coefficient * pureTensor([b[0:i],b[i],b[i+1:]])
+        return answer
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
+    return m_1Inner(abc)

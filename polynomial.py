@@ -1,111 +1,81 @@
+import abstractPolynomial
 import monomial
-import copy
 import coefficient
-class polynomial:
-    """A polynomial with it's own defined rels"""
-    
-    
+import composite
+class polynomial(composite.composite,abstractPolynomial.abstractPolynomial):
+    """
+    File: polynomial.py
+    Author: Chris Campbell
+    Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
+    Github: https://github.com/chriscampbell19
+    Description: The polynomial class composite class for abstractPolynomials.
+    """
+    ##############################################################################
+    ######  CONSTRUCTORS
+    ##############################################################################
 
-    def __init__(self,monos=[]):
-        self.monos = copy.deepcopy(monos)
-        self.sanityCheck()
-    
-    def isZero(self):
-        for i in self.monos:
-            if not i.isZero():
-                return False
-        return True
-    
-    
-    
-    
-    ##########################################################################################################################################################
-    ##################################################################SORTING METHODS ##################################################################
-    ##########################################################################################################################################################
-    def sorted(self):
-        self.sanityCheck()
-        for i in self.monos:
-            if not i.sorted():
-                return False
-        for i in self.monos:
-            for j in self.monos:
-                if j is i:
-                    continue
-                if i.safeSort()==j.safeSort():
-                    self.sanityCheck()
-                    return False
-        self.sanityCheck()
-        return True
-    
-    def sort(self):
-        self.sanityCheck()
-        if self.sorted():
-            return
-        flag = False
-        for i in self.monos:
-            i.sort()
-            if flag:
-                break
-            for j in self.monos:
-                j.sort()
-                if j is i:
-                    continue
-                if i.safeSort()==j.safeSort():
-                    self.monos = [z for z in self.monos if (not z is i) and (not z is j) ]
-                    self.monos.append(i+j)
-                    flag = True
-                    break
-        self.sanityCheck() 
-        self.sort() 
-    
-    ##########################################################################################################################################################
-    ################################################################## __methods__ ##################################################################
-    ##########################################################################################################################################################
-    
-    def __repr__(self):
-        self.sanityCheck()
-        if self.isZero():
-            return "0"
-        return "+".join(x.__repr__() for x in self.monos if not x.isZero())
+    def __init__(self,monomials=()):
+        if isinstance(monomials, monomial.monomial):
+            monomials = (monomials,)
+        monomials = tuple(monomials)
+        composite.composite.__init__(self,monomials)
+        self.monomials = monomials
 
-    def __mul__(self,other):
-        self.sanityCheck()
-        ret = copy.deepcopy(self)
-        if isinstance(other,monomial.monomial) or (type(other) in [float,int]) or isinstance(other,coefficient.coefficient):
-            for i in range(0,len(self.monos)):
-                ret.monos[i] = ret.monos[i] * other
+
+
+
+    ##############################################################################
+    ######  MATHEMATICAL METHODS
+    ##############################################################################
+
+
+    def __mul__(self, other):
+        if len(self) == 0:
+            return self
+        if isinstance(other,monomial.monomial) or (type(other) in [str,float,int]) or isinstance(other,coefficient.coefficient):
+            newMonos = []
+            for i in self:
+                newMonos.append(i * other)
+            return polynomial(tuple(newMonos)).clean()
         if isinstance(other,polynomial):
-            flag = True
+            if len(other.monomials) == 0:
+                return other
+            newMonos = []
+            for mono1 in self:
+                for mono2 in other.monomials:
+                    newMonos.append(mono1 * mono2)
+            return polynomial(tuple(newMonos)).clean()
+        # From here on we know length of monomials > 0
 
-            for i in other.monos:
-                if flag:
-                    ret = ret * i
-                    flag = False
-                else:
-                    ret = ret + (ret * i)
-        self.sanityCheck()
-        return ret
-    
-    def __add__(self,other):
-        self.sanityCheck()
-        ret = copy.deepcopy(self)
+
+    def __rmul__(self,other):
         if isinstance(other,monomial.monomial):
-            ret.monos.append(other)
-        if isinstance(other,polynomial):
-            for i in other.monos:
-                ret = ret + i
-        ret.sort()
-        self.sanityCheck()
-        return ret
-    def __sub__(self,other):
-        self.sanityCheck()
-        return self + (other * (-1))
-    ##########################################################################################################################################################
-    ################################################################## Debugging Code ##################################################################
-    ##########################################################################################################################################################
- 
-    def sanityCheck(self):
-        assert isinstance(self.monos,list)
-        for i in self.monos:
-            assert isinstance(i,monomial.monomial)
-    
+            other = polynomial(other)
+            return (other * self).clean()
+        elif (type(other) in [str,float,int]) or isinstance(other,coefficient.coefficient):
+            return self * other
+        else:
+            return NotImplemented
+
+    def __add__(self,other):
+        if isinstance(other,abstractPolynomial.abstractPolynomial):
+            return composite.composite.__add__(self,other)
+
+        elif (type(other) in [str,float,int]) or isinstance(other,coefficient.coefficient):
+            return self + monomial.monomial(other)
+
+        else:
+            return NotImplemented
+
+
+
+if __name__ == '__main__':
+    x1 = monomial.monomial(1,'x1')
+    x2 = monomial.monomial(1,'x2')
+    y = x1*x2
+    z = x2*x1 *'q'
+    xy = y + z * z + y
+    print "xy=" , xy.toLatex()
+    print xy.clean()
+    print "xy ^ 2= " , (xy * xy).toLatex()
+    print xy-(xy + 'q') * 2
