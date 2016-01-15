@@ -21,9 +21,9 @@ class tensor(composite.composite,abstractTensor.abstractTensor):
         if isinstance(polynomials, pureTensor.pureTensor):
             pureTensors = (polynomials,)
         if len(polynomials) >= 1:
-            if isinstance(polynomials[0], pureTensor.pureTensor):
+            if isinstance(polynomials[0], pureTensor.pureTensor): # If this is a list of pureTensors, just conver to tuple and carry on
                 pureTensors = tuple(polynomials)
-            else:
+            else: #Otherwise, we assume it is a list of polynomials and try and seperate into a list of pure tensors
                 def pureTensorHelper(polynomials):
                     assert len(polynomials) > 0
                     for i in polynomials:
