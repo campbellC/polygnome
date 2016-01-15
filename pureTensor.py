@@ -56,10 +56,7 @@ class pureTensor(abstractTensor.abstractTensor):
         yield self
 
     def isAddable(self,other):
-        if self.isZero() or other.isZero():
-            return True
-        else:
-            return self.monomials == other.monomials
+        return self.monomials == other.monomials
 
     def __add__(self,other ):
         if other == 0:
