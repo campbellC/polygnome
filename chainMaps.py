@@ -4,7 +4,7 @@ from tensor import tensor
 from monomial import monomial
 from tensorAlgebra import tensorAlgebra
 from algebra import algebra
-
+from functionOnKn import functionOnKn
 
 class bimoduleMapDecorator(object):
     """
@@ -208,11 +208,48 @@ m_2Dual = dualMap(m_2)
 k_2Dual = dualMap(k_2)
 k_3Dual = dualMap(k_3)
 
-i_1Dual = dualMap(i_1)
-i_2Dual = dualMap(i_2)
-i_3Dual = dualMap(i_3)
+def i_3Dual(func,alg,basisOfK3):
+    images= []
+    for i in basisOfK3:
+        images.append(func(i_3(i,alg)))
+    return functionOnKn(alg,basisOfK3,images)
 
-b_nDual = dualMap(b_n)
 
 
+##############################################################################
+######  Gerstenhaber Bracket
+##############################################################################
 
+def o0(f,g,alg):
+    B3 = tensorAlgebra([alg] * 5)
+
+    @bimoduleMapDecorator(B3,alg)
+    def localO(abcde):
+        intermediate = g(pureTensor([1,abcde[1],abcde[2],1]))
+        return f(pureTensor(abcde[0]).tensorProduct(intermediate).tensorProduct(abcde[3:]))
+    return localO
+
+def o1(f,g,alg):
+    B3 = tensorAlgebra([alg] * 5)
+
+    @bimoduleMapDecorator(B3,alg)
+    def localO(abcde):
+        intermediate = g(pureTensor([1,abcde[2],abcde[3],1]))
+        return f(abcde[:2].tensorProduct(intermediate).tensorProduct(abcde[4]))
+    return localO
+
+
+def o(f,g,alg):
+    def localO(abcde):
+        return o0(f,g,alg)(abcde)-o1(f,g,alg)(abcde)
+    return localO
+
+def GerstenhaberBracket(f,g,basisOfK3):
+    alg = f.algebra
+    f = m_2Dual(f)
+    g = m_2Dual(g)
+
+    def localBracket(abcde):
+        return o(f,g,alg)(abcde)+o(g,f,alg)(abcde)
+
+    return i_3Dual(localBracket,alg,basisOfK3)

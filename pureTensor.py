@@ -94,16 +94,16 @@ class pureTensor(abstractTensor.abstractTensor):
         if isinstance(other,tensor.tensor):
             return reduce(lambda x,y: x+y, [self.tensorProduct(z) for z in other], tensor.tensor())
         if not isinstance(other, pureTensor):
-            other = pureTensor( (other,) )
+            other = tensor.tensor( (other,) )
+            return self.tensorProduct(other)
         return pureTensor(self.monomials + other.monomials, self.coefficient * other.coefficient)
 
     def subTensor(self,a,b):
-        assert 0 <= a<= len(self)
-        assert a <= b<= len(self)
-        new = self.clean().monomials[a:b]
-        return pureTensor(new)
+        return self[a:b]
 
     def __getitem__(self,index):
+        if isinstance(index,slice):
+            return pureTensor(self.monomials[index])
         return self.monomials[index]
 
     def __len__(self):

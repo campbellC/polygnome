@@ -4,10 +4,13 @@ import unittest
 from pureTensor import pureTensor
 from chainMaps import *
 from theAlgebraA import A,bases,K2Basis,K3Basis
-
+from theAlgebraAq import Aq,qK2Basis,qK3Basis
 
 class chainMapsTest(unittest.TestCase):
 
+    ##############################################################################
+    ###### A tests
+    ##############################################################################
 
 
     def test_diagramCommutesTestA1(self):
@@ -47,7 +50,45 @@ class chainMapsTest(unittest.TestCase):
         for i in K2Basis:
             self.assertEqual(b_n(i_2(i,A),A),i_1(k_2(i,A),A))
 
-    # def test_diagramCommutesTestAq(self):
-        # for i in self.TESTSET:
-            # self.assertEqual(k_2(m_2(i,Aq),Aq),m_1(b_n(i,Aq),Aq))
+    ##############################################################################
+    ######  Aq tests
+    ##############################################################################
+
+    def test_diagramCommutesTestAq1(self):
+        TESTSET =[]
+        for i in bases[2]:
+            for j in bases[2]:
+                TESTSET.append(pureTensor([1,i,j,1]))
+        for i in TESTSET[:10]:
+            self.assertEqual(k_2(m_2(i,Aq),Aq),m_1(b_n(i,Aq),Aq))
+
+    def test_diagramCommutesTestAq2(self):
+        TESTSET = []
+        for i in bases[2]:
+            for j in bases[3]:
+                TESTSET.append(pureTensor([1,i,j,1]))
+                TESTSET.append(pureTensor([1,j,i,1]))
+        for i in TESTSET[:10]:
+            self.assertEqual(k_2(m_2(i,Aq),Aq),m_1(b_n(i,Aq),Aq))
+
+    def test_diagramCommutesTestAq3(self):
+        TESTSET =[]
+        for i in bases[3]:
+            for j in bases[3]:
+                TESTSET.append(pureTensor([1,i,j,1]))
+        for i in TESTSET[:10]:
+            self.assertEqual(k_2(m_2(i,Aq),Aq),m_1(b_n(i,Aq),Aq))
+
+    def test_qk_3_k_2_chainCondition(self):
+        for i in qK3Basis:
+            self.assertEqual(k_2(k_3(i,Aq),Aq),0)
+
+    def test_qi_3_i_2_commutingCondition(self):
+        for i in qK3Basis:
+            self.assertEqual(b_n(i_3(i,Aq),Aq),i_2(k_3(i,Aq),Aq))
+
+    def test_qi_2_i_1_commutingCondition(self):
+        for i in qK2Basis:
+            self.assertEqual(b_n(i_2(i,Aq),Aq),i_1(k_2(i,Aq),Aq))
+
 
