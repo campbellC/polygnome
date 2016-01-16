@@ -43,6 +43,9 @@ class composite(polygnomeObject.polygnomeObject):
 
     def __len__(self):
         return len(self.components)
+
+    def __getitem__(self,index):
+        return self.components[index]
     ##############################################################################
     ######  MATHEMATICAL METHODS
     ##############################################################################

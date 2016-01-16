@@ -91,6 +91,8 @@ class pureTensor(abstractTensor.abstractTensor):
         return reduce(lambda x,y: x+ y, self.monomials)
 
     def tensorProduct(self,other):
+        if isinstance(other,tensor.tensor):
+            return reduce(lambda x,y: x+y, [self.tensorProduct(z) for z in other], tensor.tensor())
         if not isinstance(other, pureTensor):
             other = pureTensor( (other,) )
         return pureTensor(self.monomials + other.monomials, self.coefficient * other.coefficient)

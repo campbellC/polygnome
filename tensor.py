@@ -77,7 +77,10 @@ class tensor(composite.composite,abstractTensor.abstractTensor):
         else:
             return NotImplemented
 
-
-
+    def tensorProduct(self,other):
+        answer = tensor()
+        for i in self:
+            answer = answer + i.tensorProduct(other)
+        return answer
 
 

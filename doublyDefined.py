@@ -36,6 +36,10 @@ class doublyDefined(polygnomeObject.polygnomeObject):
     ######  CODE TO MAKE THIS USEABLE IN TENSOR PRODUCTS
     ##############################################################################
 
+    def degree(self):
+        i,j = self.leftHandRepresentation[0]
+        return i.degree() + j.degree()
+
     def clean(self):
         return self
 

@@ -37,10 +37,18 @@ class bimoduleMapDecorator(object):
                     answer = answer + pure.coefficient * left * func(middle) * right
             return self.codomain.reduce(answer)
         return wrapped_func
-
+##############################################################################
+######  Chain map definitions
+##############################################################################
 def b_n(tens,alg):
-    domain = tensorAlgebra([alg] * len(tens))
-    codomain = tensorAlgebra([alg] * (len(tens) - 1))
+    tens = tens.clean()
+    if tens == 0:
+        return 0
+    else:
+        for pure in tens:
+            domain = tensorAlgebra([alg] * len(pure))
+            codomain = tensorAlgebra([alg] * (len(pure) - 1))
+            break
 
     @bimoduleMapDecorator(domain,codomain)
     def b_nInner(tens):
@@ -52,11 +60,22 @@ def b_n(tens,alg):
         else:
             answer = tens.subTensor(1,len(tens) )
             answer = answer - pureTensor(1).tensorProduct(tens[1]*tens[2]).tensorProduct(tens.subTensor(3,len(tens)))
-            answer = answer + tens.subTensor(0,2).tensorProduct(b_n(tens.subTensor(2,len(tens)), alg))
+            if len(tens) != 3:
+                answer = answer + tens.subTensor(0,2).tensorProduct(b_n(tens.subTensor(2,len(tens)), alg))
             return answer
     return b_nInner(tens)
 
+def k_1(tens,alg):
+    freeAlgebra = algebra()
+    K1 = tensorAlgebra([alg,freeAlgebra,alg])
+    K0 = tensorAlgebra([alg,alg])
 
+    @bimoduleMapDecorator(K1,K0)
+    def k_1Inner(pT):
+        assert isinstance(pT,pureTensor)
+        generator = pT[1]
+        return pureTensor([generator,1])-pureTensor([1,generator])
+    return k_1Inner(tens)
 
 def k_2(tens,alg):
     freeAlgebra = algebra()
@@ -68,13 +87,69 @@ def k_2(tens,alg):
         answer= tensor()
         rel =tens.monomials[1]
         for i in rel.leadingMonomial:
-            answer = answer + i.coefficient * pureTensor((i.submonomial(0,1),i.submonomial(1,2),monomial(1)))
-            answer = answer + i.coefficient * pureTensor((monomial(1),i.submonomial(0,1),i.submonomial(1,2)))
+            answer = answer + i.coefficient * pureTensor((i.submonomial(0,1),i.submonomial(1,2), 1))
+            answer = answer + i.coefficient * pureTensor((1,i.submonomial(0,1),i.submonomial(1,2)))
         for i in rel.lowerOrderTerms:
-            answer = answer - i.coefficient * pureTensor((i.submonomial(0,1),i.submonomial(1,2),monomial(1)))
-            answer = answer - i.coefficient * pureTensor((monomial(1),i.submonomial(0,1),i.submonomial(1,2)))
+            answer = answer - i.coefficient * pureTensor((i.submonomial(0,1),i.submonomial(1,2), 1))
+            answer = answer - i.coefficient * pureTensor((1,i.submonomial(0,1),i.submonomial(1,2)))
         return answer
     return k_2Inner(tens)
+
+def k_3(tens,alg):
+    freeAlgebra = algebra()
+    K3 = K2 = tensorAlgebra([alg,freeAlgebra,alg])
+
+    @bimoduleMapDecorator(K3,K2)
+    def k_3Inner(pT):
+        answer= tensor()
+        doublyDefined = pT[1]
+        for generator, rel in doublyDefined.leftHandRepresentation:
+            answer = answer + pureTensor((generator,rel,1)).clean()
+        for rel, generator in doublyDefined.rightHandRepresentation:
+            answer = answer - pureTensor((1,rel,generator)).clean()
+        return answer
+    return k_3Inner(tens)
+
+def i_1(tens,alg):
+    freeAlgebra = algebra()
+    B1 = tensorAlgebra([alg] * 3)
+    K1 = tensorAlgebra([alg,freeAlgebra,alg])
+
+    @bimoduleMapDecorator(K1,B1)
+    def i_1Inner(pT):
+        return pT
+    return i_1Inner(tens)
+
+def i_2(tens,alg):
+    freeAlgebra = algebra()
+    B2 = tensorAlgebra([alg] * 4)
+    K2 = tensorAlgebra([alg,freeAlgebra,alg])
+
+    @bimoduleMapDecorator(K2,B2)
+    def i_2Inner(pT):
+        answer = tensor()
+        rel = pT[1]
+        for term in rel.leadingMonomial:
+            answer = answer + term.coefficient * pureTensor((1,term[0],term[1],1))
+        for term in rel.lowerOrderTerms:
+            answer = answer - term.coefficient * pureTensor((1,term[0],term[1],1))
+        return answer
+    return i_2Inner(tens)
+
+def i_3(tens,alg):
+    freeAlgebra = algebra()
+    B3 = tensorAlgebra([alg] * 5)
+    K3 = tensorAlgebra([alg,freeAlgebra,alg])
+
+    @bimoduleMapDecorator(K3,B3)
+    def i_3Inner(pT):
+        answer = tensor()
+        doublyDefined = pT[1]
+        for generator, rel in doublyDefined.leftHandRepresentation:
+            rightHandSide = generator * i_2(pureTensor([1,rel,1]),alg)
+            answer = answer + pureTensor(1).tensorProduct(rightHandSide)
+        return answer
+    return i_3Inner(tens)
 
 
 def m_2(abcd,alg):
@@ -115,8 +190,29 @@ def m_1(abc,alg):
     return m_1Inner(abc)
 
 
+##############################################################################
+######  Dualised chain maps
+##############################################################################
 
 
+def dualMap(chainMap):
+    def functionFactory(func):
+        def newfunc(tensor):
+            return func(chainMap(tensor,func.algebra))
+        return newfunc
+    return functionFactory
+
+m_1Dual = dualMap(m_1)
+m_2Dual = dualMap(m_2)
+
+k_2Dual = dualMap(k_2)
+k_3Dual = dualMap(k_3)
+
+i_1Dual = dualMap(i_1)
+i_2Dual = dualMap(i_2)
+i_3Dual = dualMap(i_3)
+
+b_nDual = dualMap(b_n)
 
 
 
