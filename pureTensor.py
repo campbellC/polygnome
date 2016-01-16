@@ -2,6 +2,8 @@ import abstractTensor
 import tensor
 import coefficient
 import monomial
+import relation
+import doublyDefined #TODO: make interface PureTensorable so we can hide all this nonsense in tensor product
 class pureTensor(abstractTensor.abstractTensor):
     """
     File: pureTensor.py
@@ -91,11 +93,10 @@ class pureTensor(abstractTensor.abstractTensor):
         return reduce(lambda x,y: x+ y, self.monomials)
 
     def tensorProduct(self,other):
-        if isinstance(other,tensor.tensor):
+        if type(other) in [relation.relation,doublyDefined.doublyDefined,coefficient.coefficient, str, float, int, monomial.monomial]:
+            return self.tensorProduct(pureTensor(other))
+        if not isinstance(other,pureTensor):
             return reduce(lambda x,y: x+y, [self.tensorProduct(z) for z in other], tensor.tensor())
-        if not isinstance(other, pureTensor):
-            other = tensor.tensor( (other,) )
-            return self.tensorProduct(other)
         return pureTensor(self.monomials + other.monomials, self.coefficient * other.coefficient)
 
     def subTensor(self,a,b):

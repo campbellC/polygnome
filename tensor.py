@@ -17,6 +17,8 @@ class tensor(composite.composite,abstractTensor.abstractTensor):
     ##############################################################################
 
     def __init__(self,polynomials=()):
+        if polynomials == 0:
+            polynomials = ()
         pureTensors = ()
         if isinstance(polynomials, pureTensor.pureTensor):
             pureTensors = (polynomials,)

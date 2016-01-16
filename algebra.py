@@ -1,7 +1,7 @@
 import polygnomeObject
 import relation
 import reductionFunction
-
+import monomial
 class algebra(polygnomeObject.polygnomeObject):
     """
     File: algebra.py
@@ -23,6 +23,8 @@ class algebra(polygnomeObject.polygnomeObject):
             assert isinstance(i,relation.relation)
         self.relations = relations
 
+    def zero(self):
+        return monomial.monomial(0)
 
     def __repr__(self):
         if len(self.relations) == 0:

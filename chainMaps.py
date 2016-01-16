@@ -22,7 +22,7 @@ class bimoduleMapDecorator(object):
     def __call__(self,func):
         def wrapped_func(tens):
             if tens == 0:
-                return tensor()
+                return self.codomain.zero()
             tens = tens.clean()
             tens = self.domain.reduce(tens)
             firstItem = True
