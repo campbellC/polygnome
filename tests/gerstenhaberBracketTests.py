@@ -19,3 +19,9 @@ class chainMapsTest(unittest.TestCase):
         g = GerstenhaberBracket(f,f,K3Basis)
         answer = vector([2 * x1 * x1 * x4,-x2 * x3 * x3 * 2,-2 * x2 * x3 * x4,2 * x2 * x1 * x4])
         self.assertEqual(g,answer)
+
+    def test_Gerstenhaber2(self):
+        f = functionOnKn(A,K2Basis, [x1*x3,0,0,x2*x3,x1*x4,0])
+        g = GerstenhaberBracket(f,f,K3Basis)
+        answer = vector([0,0,0,0])
+        self.assertEqual(g,answer)

@@ -5,6 +5,7 @@ from pureTensor import pureTensor
 from relation import relation
 from doublyDefined import doublyDefined
 from coefficient import coefficient
+from functionOnKn import functionOnKn
 """
 File: theAlgebraAq.py
 Author: Chris Campbell
@@ -18,7 +19,7 @@ bases of K1,K2,K3
 ##############################################################################
 
 x1, x2, x3, x4 = generators('x1 x2 x3 x4')
-gens = [x2, x1, x3, x4]
+A1Basis = gens = [x2, x1, x3, x4]
 
 A2Basis =[]
 for index1,i in enumerate(gens):
@@ -68,7 +69,43 @@ doublyDefineds = [ doublyDefined( [[x3,r[4]],[x1*q,r[6]],[-x1,r[5]]],[[r[1],x2],
                   doublyDefined( [[x4,r[4]],[x2 * q,r[6]],[-x2,r[5]]],[[r[3],x2],[r[2],-x3]])]
 qK3Basis = [pureTensor([1,x,1]) for x in doublyDefineds]
 
+qK1DualBasis = []
+for i in A1Basis:
+    qK1DualBasis.append( functionOnKn(Aq, qK1Basis,[i,0,0,0]))
+for i in A1Basis:
+    qK1DualBasis.append( functionOnKn(Aq, qK1Basis,[0,i,0,0]))
+for i in A1Basis:
+    qK1DualBasis.append( functionOnKn(Aq, qK1Basis,[0,0,i,0]))
+for i in A1Basis:
+    qK1DualBasis.append( functionOnKn(Aq, qK1Basis,[0,0,0,i]))
+qK2DualBasis = []
+for i in A2Basis:
+    qK2DualBasis.append( functionOnKn(Aq, qK2Basis,[i,0,0,0,0,0]))
+for i in A2Basis:
+    qK2DualBasis.append( functionOnKn(Aq, qK2Basis,[0,i,0,0,0,0]))
+for i in A2Basis:
+    qK2DualBasis.append( functionOnKn(Aq, qK2Basis,[0,0,i,0,0,0]))
+for i in A2Basis:
+    qK2DualBasis.append( functionOnKn(Aq, qK2Basis,[0,0,0,i,0,0]))
+for i in A2Basis:
+    qK2DualBasis.append( functionOnKn(Aq, qK2Basis,[0,0,0,0,i,0]))
+for i in A2Basis:
+    qK2DualBasis.append( functionOnKn(Aq, qK2Basis,[0,0,0,0,0,i]))
+qK3DualBasis = []
+for i in A3Basis:
+    qK3DualBasis.append( functionOnKn(Aq, qK3Basis, [i,0,0,0]))
+for i in A3Basis:
+    qK3DualBasis.append( functionOnKn(Aq, qK3Basis, [0,i,0,0]))
+for i in A3Basis:
+    qK3DualBasis.append( functionOnKn(Aq, qK3Basis, [0,0,i,0]))
+for i in A3Basis:
+    qK3DualBasis.append( functionOnKn(Aq, qK3Basis, [0,0,0,i]))
 
+qHH2Basis = [ [ x1 * x3 , 0 , 0 , x2 * x3 , q *x1 * x4 , 0],
+    [ 0 , x2 * x2 , 0 , 0 , x2 * x3 , 0 ],
+    [ 0 , x2 * x4 , 0 , 0 , x1 * x4 , 0 ],
+    [ 0 , x4 * x4 , 0 , 0 , x3 * x4 , 0 ]]
 
+qHH2Basis = [functionOnKn(Aq, qK2Basis, vector(i)) for i in qHH2Basis]
 if __name__ == '__main__':
     pass

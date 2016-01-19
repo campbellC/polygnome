@@ -1,7 +1,7 @@
 import vector
-import chainMaps
 import tensorAlgebra
 import algebra
+import bimoduleMapDecorator
 
 class functionOnKn(vector.vector):
     """
@@ -20,7 +20,7 @@ class functionOnKn(vector.vector):
 
     def __call__(self, tensor):
 
-        @chainMaps.bimoduleMapDecorator(self.domain,self.codomain)
+        @bimoduleMapDecorator.bimoduleMapDecorator(self.domain,self.codomain)
         def helper(PT):
             index = self.basisOfKn.index(PT)
             return self[index]
