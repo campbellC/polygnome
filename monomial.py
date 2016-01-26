@@ -39,7 +39,9 @@ class monomial(abstractPolynomial.abstractPolynomial):
 
 
 
-    def submonomial(self,a,b): #returns the monomial from position a to position b (right hand open). e.g. xy._submonomial(0,1) = x. sets coefficient to one
+    def submonomial(self,a,b):
+        """Returns the monomial from position a to position b (right hand open).
+        e.g. xy._submonomial(0,1) = x. Sets coefficient to one"""
         return self[a:b]
 
     def withCoefficientOf1(self):
@@ -49,6 +51,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
         yield self
 
     def __getitem__(self,index):
+        """Access the generators as submonomials"""
         if isinstance(index,slice):
             return monomial(1,self.generators[index])
         return monomial(1,[self.generators[index]])
@@ -60,12 +63,8 @@ class monomial(abstractPolynomial.abstractPolynomial):
         return len(self.generators)
 
     def isAddable(self,other):
-        if self.degree() != other.degree():
-            return False
-        if self.generators == other.generators:
-            return True
-        else:
-            return False
+        """Tests whether the generator tuples are equal"""
+        return self.generators == other.generators
 
 
     def isZero(self):

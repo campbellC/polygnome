@@ -8,7 +8,7 @@ class polynomial(composite.composite,abstractPolynomial.abstractPolynomial):
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
     Github: https://github.com/chriscampbell19
-    Description: The polynomial class composite class for abstractPolynomials.
+    Description: The polynomial class is the composite class for abstractPolynomials.
     """
     ##############################################################################
     ######  CONSTRUCTORS
@@ -19,7 +19,7 @@ class polynomial(composite.composite,abstractPolynomial.abstractPolynomial):
             monomials = (monomials,)
         monomials = tuple(monomials)
         composite.composite.__init__(self,monomials)
-        self.monomials = monomials
+        self.monomials = self.components
 
 
 
