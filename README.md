@@ -17,6 +17,7 @@ Where `path/to/polygnome` should be changed so to reflect the folders location o
 Examples
 ---------------
 A simple reduction:
+
 	from polygnome import *
 	x,y,z = generators('x y z')
 	commutativeRelations =(relation(y * x, x * y), relation(z * x, x * z), relation(z * y, y * z))
@@ -25,6 +26,7 @@ A simple reduction:
 
 
 A noncommutative reduction in the quantum plane:
+	
 	from polygnome import *
 	x, y = generators('x y')
 	qCommutationRelation = relation(y * x, 'q' * x * y) # alternatively coefficient('q')
@@ -33,6 +35,7 @@ A noncommutative reduction in the quantum plane:
 	# prints "qq*xy^{2} + 2"
 
 An example of a function on the tensor product of an algebra with itself:
+
 	from polygnome import *
 
 	x, y = generators('x y')
