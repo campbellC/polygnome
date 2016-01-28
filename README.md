@@ -32,7 +32,7 @@ A noncommutative reduction in the quantum plane:
 	qCommutationRelation = relation(y * x, 'q' * x * y) # alternatively coefficient('q')
 	quantumPlane = algebra(qCommutationRelation)
 	print quantumPlane.reduce( (y ** 2) * x + 2).toLatex() 
-	# prints "qq*xy^{2} + 2"
+	# prints "qqxy^{2} + 2"
 
 An example of a function on the tensor product of an algebra with itself:
 
@@ -50,7 +50,7 @@ An example of a function on the tensor product of an algebra with itself:
 		b = ab[1]
 		return a * b
 	
-	poly = pureTensor(y * x).tensorProduct( x) + pureTensor( x * y).tensorProduct(y) 
+	poly = pureTensor(y * x).tensorProduct(x) + pureTensor(x * y).tensorProduct(y) 
 	print multiplicationMap(poly)
 outputs qqxxy+xyy. Note the decorator extends the definition of the map bilinearly, and takes in
 the domain and the codomain so that it can reduce the output.

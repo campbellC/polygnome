@@ -142,10 +142,8 @@ class monomial(abstractPolynomial.abstractPolynomial):
                 else:
                     newTemp.append(i + '^{' + str(currentCount) + '}')
             temp = newTemp
-            coefficientJoiner = '*'
-            if self.coefficient == -1:
-                coefficientJoiner = ''
-            return self.coefficient.toLatex() + coefficientJoiner + ''.join(temp)
+
+            return self.coefficient.toLatex() + ''.join(temp)
 
 
 def generators(inString):
