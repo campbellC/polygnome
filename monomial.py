@@ -121,8 +121,27 @@ class monomial(abstractPolynomial.abstractPolynomial):
         elif self.degree() == 0:
             return self.coefficient.toLatex()
         else:
-            temp = map(lambda x: re.match(monomial.generatorRE, x), self.generators)
-            temp = map( lambda x: x.group('letter') + '_{' + x.group('digits')+ '}', temp)
+            #next two lines add subscripts before numbers
+            temp = [re.match(monomial.generatorRE, x) for x in self.generators]
+            temp = [ x.group('letter') + '_{' + x.group('digits')+ '}' if x.group('digits') != ''
+                    else x.group('letter') for x in temp]
+            #next block adds superscripts for repititions
+            newTemp = []
+            currentCount = 1
+            for index, i in enumerate(temp):
+                if currentCount > 1:
+                    currentCount -= 1
+                    continue
+                for j in temp[index+1:]:
+                    if j == i:
+                        currentCount += 1
+                    else:
+                        break
+                if currentCount == 1:
+                    newTemp.append(i)
+                else:
+                    newTemp.append(i + '^{' + str(currentCount) + '}')
+            temp = newTemp
             coefficientJoiner = '*'
             if self.coefficient == -1:
                 coefficientJoiner = ''

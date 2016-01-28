@@ -87,6 +87,22 @@ def k_3(tens,alg):
         return answer
     return k_3Inner(tens)
 
+def k_4(tens,alg):
+    freeAlgebra = algebra()
+    K4 = K3 = tensorAlgebra([alg,freeAlgebra,alg])
+
+    @bimoduleMapDecorator(K4,K3)
+    def k_4Inner(pT):
+        answer= tensor()
+        doublyDefined = pT[1]
+        for generator, rel in doublyDefined.leftHandRepresentation:
+            answer = answer + pureTensor((generator,rel,1)).clean()
+        for rel, generator in doublyDefined.rightHandRepresentation:
+            answer = answer - pureTensor((1,rel,generator)).clean()
+        return answer
+    return k_4Inner(tens)
+
+
 def i_1(tens,alg):
     freeAlgebra = algebra()
     B1 = tensorAlgebra([alg] * 3)
@@ -190,6 +206,7 @@ def koszulDualMap(chainMap):
 
 k_2Dual = koszulDualMap(k_2)
 k_3Dual = koszulDualMap(k_3)
+k_4Dual = koszulDualMap(k_4)
 
 def i_3Dual(func,alg,basisOfK3):
     images= []

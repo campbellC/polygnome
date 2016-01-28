@@ -37,8 +37,21 @@ for index1,i in enumerate(gens):
             if index3 < index2:
                 continue
             A3Basis.append(i * j * k)
+A4Basis = []
 
-bases = [[1],gens,A2Basis,A3Basis]
+for index1,i in enumerate(gens):
+    for index2, j in enumerate(gens):
+        if index2 < index1:
+            continue
+        for index3, k in enumerate(gens):
+            if index3 < index2:
+                continue
+            for index4, l in enumerate(gens):
+                if index4 < index3:
+                    continue
+                A4Basis.append(i * j * k * l)
+
+bases = [[1],gens,A2Basis,A3Basis,A4Basis]
 ##############################################################################
 ######  The Algebra A
 ##############################################################################
@@ -66,8 +79,12 @@ doublyDefineds = [ doublyDefined( [[x3,r[4]],[x1,r[6]],[-x1,r[5]]],[[r[1],x2],[r
                   doublyDefined( [[x4,r[1]],[-x1,r[3]]],[[r[6],x1],[r[4],x3],[r[3],-x3]]),
                   doublyDefined( [[x4,r[5]],[-x1,r[2]]],[[r[6],x2],[r[4],x4],[r[3],-x4]]),
                   doublyDefined( [[x4,r[4]],[x2,r[6]],[-x2,r[5]]],[[r[3],x2],[r[2],-x3]])]
+dd = [0] + doublyDefineds
 K3Basis = [pureTensor([1,x,1]) for x in doublyDefineds]
 
+
+K4Bar =[ doublyDefined( [[x4,dd[1]],[-x1,dd[4]]],[[dd[2],x2],[dd[3],-x3]])]
+K4Basis = [pureTensor([1,x,1]) for x in K4Bar]
 K1DualBasis = []
 for i in A1Basis:
     K1DualBasis.append( functionOnKn(A,K1Basis,[i,0,0,0]))
@@ -101,6 +118,11 @@ for i in A3Basis:
     K3DualBasis.append( functionOnKn(A, K3Basis, [0,0,i,0]))
 for i in A3Basis:
     K3DualBasis.append( functionOnKn(A, K3Basis, [0,0,0,i]))
+
+K4DualBasis = []
+for i in A4Basis:
+    K4DualBasis.append(functionOnKn(A,K4Basis, [i]))
+
 
 HH2Basis = [[x1 * x3, 0, 0, x2 * x3, x1 * x4, 0],
     [ x3 * x3, 0, x1 * x4, 0, 0, x3 * x4],
