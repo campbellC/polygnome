@@ -74,6 +74,13 @@ class algebra(polygnomeObject.polygnomeObject):
             poly = reduction(poly)
         return sequence
 
+    def reductionSequenceGenerator(self,poly):
+        while self.doesAct(poly):
+            reduction, weight = self.makeReductionFunction(poly)
+            yield (reduction, weight)
+            poly = reduction(poly)
+
+
     def reduce(self,poly): # TODO: check running time on this, this is a slow way of doing iterable
         for reduction, weight in self.makeReductionSequence(poly):
             poly = reduction(poly)
