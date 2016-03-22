@@ -61,6 +61,6 @@ class vector(arithmeticInterface.arithmeticInterface):
 
     def toLatex(self):
         return '\\left( \\begin{array}{c} \n' +\
-                '\\ \n'.join([x.toLatex() for x in self.components]) +\
+                '\\\\ \n'.join([x.toLatex() for x in self.components]) +\
                 '\n \\end{array}\\right)'
 

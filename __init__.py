@@ -13,3 +13,4 @@ from doublyDefined import doublyDefined
 from bimoduleMapDecorator import bimoduleMapDecorator
 import theAlgebraA
 import theAlgebraAq
+import latexWriters
