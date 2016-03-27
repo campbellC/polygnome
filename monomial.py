@@ -8,7 +8,7 @@ class monomial(abstractPolynomial.abstractPolynomial):
     File: monomial.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: A monomial is basically a coefficient and a tuple of generators.
     """
     ##############################################################################

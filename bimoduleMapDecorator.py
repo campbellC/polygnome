@@ -4,7 +4,7 @@ class bimoduleMapDecorator(object):
     File: chainMaps.py
     Author: Chris Campbell
     Email: c (dot) j (dot)  campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: A decorator that extends a function defined on a tensor algebra bilinearly with respect to some algebra.
     You must pass it the domain and codomain tensor algebras in order for it to reduce input and output for you.
     """

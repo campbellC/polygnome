@@ -7,7 +7,7 @@ class tensorAlgebra(polygnomeObject.polygnomeObject):
     File: tensorAlgebra.py
     Author: Chris Campbell
     Email: c (dot) j (dot)  campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: This class encapsulates tensor algebras so that one can reduce
     tensors of elements from different algebras.
     """

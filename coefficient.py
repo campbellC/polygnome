@@ -5,7 +5,7 @@ class coefficient(arithmeticInterface.arithmeticInterface):
     File: coefficient.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: A coefficient is an element of a commutative ring with variables of the form <letter><number>+ (e.g. a1 + a2 could be
     stored as a coefficient but not var1).
     """

@@ -12,7 +12,7 @@ class relation(relationClass,
     File: relation.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description:A relation is a tuple with the leadingMonomial and lowerOrderTerms.
     """
     def __init__(self,*args,**kwargs):

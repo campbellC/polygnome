@@ -6,7 +6,7 @@ class arithmeticInterface(polygnomeObject.polygnomeObject):
     File: arithmeticInterface.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: A simple arithmetic interface that polynomials, tensors,
     vectors, and coefficients will have to implement.
     """

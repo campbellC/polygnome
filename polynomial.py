@@ -7,7 +7,7 @@ class polynomial(composite.composite,abstractPolynomial.abstractPolynomial):
     File: polynomial.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: The polynomial class is the composite class for abstractPolynomials.
     """
     ##############################################################################

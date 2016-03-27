@@ -8,7 +8,7 @@ class tensor(composite.composite,abstractTensor.abstractTensor):
     File: tensor.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: A composite class of pureTensors
     """
 

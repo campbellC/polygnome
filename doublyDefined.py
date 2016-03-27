@@ -7,7 +7,7 @@ class doublyDefined(polygnomeObject.polygnomeObject):
     File: doublyDefined.py
     Author: Chris Campbell
     Email: c (dot) j (dot)  campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: A class to encapsulate elements of K3Bar
     """
 

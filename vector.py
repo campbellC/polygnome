@@ -6,7 +6,7 @@ class vector(arithmeticInterface.arithmeticInterface):
     File: vector.py
     Author: Chris Campbell
     Email: c (dot) j (dot)  campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: A vector class for vectors of abstractPolynomials.
     """
     def __init__(self,components):

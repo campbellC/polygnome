@@ -7,7 +7,7 @@ class algebra(polygnomeObject.polygnomeObject):
     File: algebra.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: An algebra stores a list of relations and can reduce words in
     the free algebra by these relations. The relations have a choice of highest monomial already.
     """

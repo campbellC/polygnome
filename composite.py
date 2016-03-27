@@ -6,7 +6,7 @@ class composite(polygnomeObject.polygnomeObject):
     File: composite.py
     Author: Chris Campbell
     Email: c (dot) j (dot)  campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: This class abstracts the fact that tensor is to pure tensor as polynomial is to monomial.
     """
 

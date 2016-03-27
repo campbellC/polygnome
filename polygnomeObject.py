@@ -7,7 +7,7 @@ class polygnomeObject(object):
     File: printableObject.py
     Author: Chris Campbell
     Email: c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk
-    Github: https://github.com/chriscampbell19
+    Github: https://github.com/campbellC
     Description: An abstract superclass that every object must inherit from. Outlines basic methods
     every polygnome class must have.
     """
