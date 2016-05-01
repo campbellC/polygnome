@@ -252,4 +252,4 @@ def GerstenhaberBracket(f,g,basisOfK3):
     def localBracket(abcde):
         return o(f,g,alg)(abcde)+o(g,f,alg)(abcde)
 
-    return i_3Dual(localBracket,alg,basisOfK3)
+    return i_3Dual(localBracket, alg, basisOfK3)

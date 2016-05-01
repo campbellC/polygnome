@@ -20,10 +20,10 @@ class relation(relationClass,
         self.coefficient = coefficient.coefficient(1)
 
     def __repr__( self):
-        return '(' + repr(self.leadingMonomial - self.lowerOrderTerms) + ')'
+        return '(' + repr(self.asPolynomial()) + ')'
 
     def toLatex(self):
-        return '(' + (self.leadingMonomial - self.lowerOrderTerms).toLatex() + ')'
+        return '(' + (self.asPolynomial()).toLatex() + ')'
 
     def doesAct(self,poly):
         return poly == self.leadingMonomial
@@ -34,6 +34,8 @@ class relation(relationClass,
     def __eq__(self,other):
         return self.leadingMonomial == other.leadingMonomial and self.lowerOrderTerms == other.lowerOrderTerms
 
+    def asPolynomial(self):
+        return self.leadingMonomial - self.lowerOrderTerms
     ##############################################################################
     ######  CODE TO MAKE THIS USEABLE IN TENSOR PRODUCTS
     ##############################################################################

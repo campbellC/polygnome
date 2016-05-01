@@ -27,5 +27,11 @@ class functionOnKn(vector.vector):
 
         return helper(tensor)
 
+    def __add__(self,other):
+        assert isinstance(other, functionOnKn)
+        return functionOnKn(self.algebra, self.basisOfKn, [a + b for a,b in zip(self.components, other.components)])
+
+    def __mul__(self,other):
+        return functionOnKn(self.algebra, self.basisOfKn, [a * other for a in self.components] )
 if __name__ == '__main__':
     pass

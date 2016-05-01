@@ -33,6 +33,8 @@ class arithmeticInterface(polygnomeObject.polygnomeObject):
         else:
             return False
 
+    def __ne__(self,other):
+        return not self.__eq__(other)
 
     @abstractmethod
     def __add__(self,other): pass

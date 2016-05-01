@@ -39,6 +39,7 @@ class vector(arithmeticInterface.arithmeticInterface):
             raise IndexError
         return self.components[index]
 
+
     def isZero(self):
         for i in self:
             if not i.isZero():

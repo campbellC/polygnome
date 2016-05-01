@@ -17,7 +17,7 @@ class coefficient(arithmeticInterface.arithmeticInterface):
             coeffs = {'' : coeffs}
 
         elif type(coeffs) is str:
-            if coeffs[0] == '-':
+            if len(coeffs) > 0 and coeffs[0] == '-':
                 coeffs = {coeffs[1:] : -1}
             else:
                 coeffs = {coeffs : 1}
@@ -76,6 +76,7 @@ class coefficient(arithmeticInterface.arithmeticInterface):
             if x.coeffs[i] !=0:
                 return False
         return True
+
 
     def __add__(self,other ):
         if isinstance(other,coefficient):
@@ -156,7 +157,7 @@ class coefficient(arithmeticInterface.arithmeticInterface):
 
     def toLatex(self):
         string = self.__repr__()
-        varWithNumRE = re.compile(r"([a-zA-Z])(\d)")
+        varWithNumRE = re.compile(r"([a-zA-Z])(\d*)")
         return re.sub(varWithNumRE, r'\1_{\2}', string)
 
 

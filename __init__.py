@@ -11,6 +11,4 @@ from chainMaps import b_n,k_1,k_2,k_3,k_4,i_1,i_2,i_3,m_2,m_1,m_1Dual,m_2Dual,k_
 from functionOnKn import functionOnKn
 from doublyDefined import doublyDefined
 from bimoduleMapDecorator import bimoduleMapDecorator
-import theAlgebraA
-import theAlgebraAq
 import latexWriters
