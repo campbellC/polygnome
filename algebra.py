@@ -15,6 +15,8 @@ class algebra(polygnomeObject.polygnomeObject):
         if isinstance(relations,relation.relation):
             relations = (relations,)
         relations = tuple(relations)
+        # If you only want one relation the following saves you having to
+        # define it seperately before making the algebra.
         if len(relations) > 0 and isinstance(relations[0],tuple):
             assert len(relations[0]) == 2
             relations = map(lambda x: relation.relation( *x),relations)
@@ -42,28 +44,50 @@ class algebra(polygnomeObject.polygnomeObject):
         for i in self.relations:
             yield i
 
-    def doesAct(self,poly): #Assumes degree 2 relations
+    def doesAct(self,poly):
         """Test if the polynomial has any monomial on which there is a relation that acts"""
         for mono in poly:
-            n = mono.degree()
-            if n <= 1:
+            monoDegree = mono.degree()
+            if monoDegree <= 1:
                 continue
-            for a in xrange(n-1):
-                for i in self.relations:
-                    if i.doesAct(mono.submonomial(a,a+2)):
+            for rel in self.relations:
+                # For each relation we check if it applies to the monomial.
+                # Firstly we check if the monomial has too low a degree
+                relDegree = rel.degree()
+                if monoDegree < relDegree:
+                    continue
+
+                # Secondly we iterate through the submonomials of length
+                # relDegree and see if any of them are the leading monomial of
+                # rel.
+                for index in xrange(monoDegree - relDegree + 1):
+                    if rel.doesAct(mono[index: index + relDegree]):
                         return True
+
         return False
 
-    def makeReductionFunction(self,poly):
+    def makeReductionFunction(self, poly):
         """Only run this if you have already checked doesAct"""
         for mono in poly:
-            n = mono.degree()
-            if n <= 1:
+            monoDegree = mono.degree()
+            if monoDegree <= 1:
                 continue
-            for a in xrange(n-1):
-                for i in self.relations:
-                    if i.doesAct(mono.submonomial(a,a+2)):
-                        return (reductionFunction.reductionFunction(mono.submonomial(0,a),i,mono.submonomial(a+2,n)), mono.coefficient)
+            for rel in self.relations:
+                # For each relation we check if it applies to the monomial.
+                # Firstly we check if the monomial has too low a degree
+                relDegree = rel.degree()
+                if monoDegree < relDegree:
+                    continue
+
+                # Secondly we iterate through the submonomials of length
+                # relDegree and see if any of them are the leading monomial of
+                # rel.
+                for index in xrange(monoDegree - relDegree + 1):
+                    if rel.doesAct(mono[index: index + relDegree]):
+                        return (reductionFunction.reductionFunction(mono[0:index],
+                                                                    rel,
+                                                                    mono[index + relDegree:])
+                                , mono.coefficient)
 
 
     def makeReductionSequence(self,poly):
