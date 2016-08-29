@@ -64,6 +64,7 @@ class coefficient(arithmeticInterface.arithmeticInterface):
     ######  MATHEMATICAL METHODS
     ##############################################################################
     def isNum(self):
+        """Is this coefficient just a number?"""
         for i in self.coeffs:
             if i != "":
                 if self.coeffs[i] != 0:

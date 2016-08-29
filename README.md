@@ -1,5 +1,7 @@
 Polygnome is a Python package designed and built for my PhD thesis working with noncommutative algebras,
-particularly in dealing with the Hochschild cohomology spaces of certain PBW-algebras.
+particularly in dealing with the Hochschild cohomology spaces of certain PBW-algebras. If you have any 
+questions regarding this package or ideas for development feel free to email me at:
+<center> c (dot) j (dot) campbell (at) ed (dot) ac (dot) uk </center>
 
 # Contents
 
@@ -9,11 +11,16 @@ particularly in dealing with the Hochschild cohomology spaces of certain PBW-alg
 
 [Overview of Design](#overview-of-design)
 
+[Coefficients](#coefficients)
+
 [Polynomials](#polynomials)
 
 [Tensors](#tensors)
 
 [Algebras and Relations](#algebras-and-relations)
+
+[Bimodule Maps](#bimodule-maps)
+
 
 # Installation <a name="installation"></a>
 
@@ -65,7 +72,7 @@ An example of a function on the tensor product of an algebra with itself:
 outputs qqxxy+xyy. Note the decorator extends the definition of the map bilinearly, and takes in
 the domain and the codomain so that it can reduce the output.
 
-# Overview Of Design" <a name="overview-of-design"></a>
+# Overview Of Design <a name="overview-of-design"></a>
 
 Polygnome is an object-oriented Python package designed for ease of use with
 particular computations in mind. No claims are made for efficiency and I
@@ -85,7 +92,7 @@ as possible, choosing to return new objects rather than mutating internal state.
 I believe this matches how mathematicians think about mathematical objects; it
 certainly matches how I think about them.
 
-## A Note on Fields and Sage 
+## A Note on Fields and Sage <a name="noteOnFields"></a> 
 
 I have not implemented any fields or code for handling different underlying
 fields. This should be doable as using Python hooks in your field definition
@@ -114,9 +121,30 @@ precise meaning of `clean` is context dependent but the basic idea is to
 simplify as much as possible without knowing any of the details of the context.
 For example, an element of the free algebra `x+x` would `clean` to `2*x`. 
 
+## Coefficients <a name="coefficients"></a>
+
+Coefficients are used throughout and should be thought of as elements of a
+polynomial ring over the underlying field that form the coefficient ring of the
+algebra of interest. In particular, they can be numbers or algebraic
+expresssions but as implemented the coefficient ring must be commutative and
+the field must be the real numbers (see [Note on Fields](#noteOnFields)).
+
+The current implementation uses a hash table to store a string-number mapping
+that maps elements in the polynomial ring to their "coefficient" numbers (there
+are two kinds of coefficient here, apologies for the confusion). For example:
+```
+q = coefficient('q')
+```
+stores the `coefficient` as a Python dictionary "{'q' : 1}".  The only
+restrictions on this are that the generators of the coefficient ring be of the
+form "\<letter>+\<digits>".
+
+
 ## Polynomials  <a name="polynomials"></a> 
 
-All polynomials inherit from the `arithmeticInterface`.  #### Composite Pattern
+All polynomials inherit from the `arithmeticInterface`.  
+
+#### Composite Pattern
 All polynomials and monomials are stored internally as elements of the free
 algebra. In order to make seperate the behaviour of polynomials from the
 algebras I made the decision that the information about the algebra in which a
@@ -211,4 +239,35 @@ method. A reduction function was defined by Bergman in his paper on the Diamond
 Lemma.
 
 
-	
+#### Tensor Algebras 
+
+A `tensorAlgebra` simply allows one to `reduce` tensor products of elements of
+different algebras. If you don't want to actually reduce one of the components
+then make that the free algebra (the default constructor of an `algebra`). Note 
+that mathematically these should really be considered 
+
+For example, the second Koszul space of an algebra A with relations R would be 
+"A | R | A". We would never want to `reduce` the middle component of any element 
+because that would not make any sense. Therefore we define the algebra to be:
+
+```
+koszulSpace = tensorAlgebra( [A, algebra(), A] )
+``` 
+
+## Bimodule Maps <a name="bimodule-maps"></a> 
+
+In order to define a bimodule map between two modules (e.g. `tensorAlgebra`) it
+is often easiest to define the map on a `pureTensor` and then extend it
+bilinearly.  The code to extend bilinearly is not interesting, repetitive and
+very easy to get wrong so I have written a decorator (see e.g. [the Python
+wiki](https://wiki.python.org/moin/PythonDecorators)) that does the extension
+for you. You must pass the decorator the domain and codomain.
+ 
+
+A use case be found in [Usage Examples](#usage-examples). For extensive
+examples of bimodule maps see the file `chainMaps.py` in which the bar map and
+several Koszul maps are defined (for mathematical definitions see
+[Braverman-Gaitsgory](https://arxiv.org/abs/hep-th/9411113)).
+
+
+
