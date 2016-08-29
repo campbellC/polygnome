@@ -26,7 +26,7 @@ class reductionFunction(namedtuple('reductionFunction', ['leftMonomial','relatio
         for mono in poly:
             if self.degree() != mono.degree():
                 answer = answer + mono
-#TODO: check impact of this choice of order of condition checks on running timeh
+#TODO: check impact of this choice of order of condition checks on running time
             elif self.leftMonomial == mono.submonomial(0,self.leftMonomial.degree()) \
                 and self.rightMonomial == mono.submonomial(self.leftMonomial.degree() + self.relation.degree(),mono.degree())\
                 and self.relation.doesAct(mono.submonomial(self.leftMonomial.degree(),self.leftMonomial.degree()+self.relation.degree())):

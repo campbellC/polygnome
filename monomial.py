@@ -45,6 +45,8 @@ class monomial(abstractPolynomial.abstractPolynomial):
         return self[a:b]
 
     def withCoefficientOf1(self):
+        """Returns a monomial with the same list of generators but with a coefficient
+        of 1"""
         return self.submonomial(0, len(self.generators))
 
     def __iter__(self):
