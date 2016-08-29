@@ -47,6 +47,8 @@ class pureTensor(abstractTensor.abstractTensor):
             return new.coefficient.isZero()
 
     def clean(self):
+        """Cleaning a pure tensors simply makes all components have coefficient one
+        and makes the coefficient to multiple of all components' coefficients"""
         newCoefficient = reduce(lambda x,y: x * y, [x.coefficient for x in self.monomials], self.coefficient)
         if newCoefficient.isZero():
             return pureTensor()
@@ -93,6 +95,7 @@ class pureTensor(abstractTensor.abstractTensor):
         return reduce(lambda x,y: x+ y, self.monomials)
 
     def tensorProduct(self,other):
+        """Add other as a component(s) on the right of self. e.g. (a|b).tensorProduct(c) = a|b|c"""
         if type(other) in [relation.relation,doublyDefined.doublyDefined,coefficient.coefficient, str, float, int, monomial.monomial]:
             return self.tensorProduct(pureTensor(other))
         if not isinstance(other,pureTensor):
