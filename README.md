@@ -85,10 +85,12 @@ as possible, choosing to return new objects rather than mutating internal state.
 I believe this matches how mathematicians think about mathematical objects; it
 certainly matches how I think about them.
 
-## A Note on Fields and Sage I have not implemented any fields or code for
-handling different underlying fields. This should be doable as using Python
-hooks in your field definition will make all of the code I have written mesh
-with yours but I am not intending to implement this feature.
+## A Note on Fields and Sage 
+
+I have not implemented any fields or code for handling different underlying
+fields. This should be doable as using Python hooks in your field definition
+will make all of the code I have written mesh with yours but I am not intending
+to implement this feature.
 
 A better approach would be to convert this package to a Sage package which I
 would be interested in doing in the long term but do not currently have the time
@@ -112,15 +114,17 @@ precise meaning of `clean` is context dependent but the basic idea is to
 simplify as much as possible without knowing any of the details of the context.
 For example, an element of the free algebra `x+x` would `clean` to `2*x`. 
 
-## Polynomials  <a name="polynomials"></a> All polynomials inherit from the
-`arithmeticInterface`.  #### Composite Pattern All polynomials and monomials are
-stored internally as elements of the free algebra. In order to make seperate the
-behaviour of polynomials from the algebras I made the decision that the
-information about the algebra in which a polynomial resides should be contained
-in the brain of the programmer. If you want to define an algebra in which `x *
-y` equals `y *x` then you can make an algebra object containing that
-information, but it does not change the fact that `x`, `y` and `x * y` are all
-instances of `monomial` and carry no information about relations at all.
+## Polynomials  <a name="polynomials"></a> 
+
+All polynomials inherit from the `arithmeticInterface`.  #### Composite Pattern
+All polynomials and monomials are stored internally as elements of the free
+algebra. In order to make seperate the behaviour of polynomials from the
+algebras I made the decision that the information about the algebra in which a
+polynomial resides should be contained in the brain of the programmer. If you
+want to define an algebra in which `x * y` equals `y *x` then you can make an
+algebra object containing that information, but it does not change the fact
+that `x`, `y` and `x * y` are all instances of `monomial` and carry no
+information about relations at all.
 
 Polynomials are implemented using the "Composite" design pattern (see
 [wikipedia](https://en.wikipedia.org/wiki/Composite_pattern)).  The class
@@ -141,22 +145,27 @@ for mono in poly:
 ```
 This will output `z` and `x`. Iterating through a monomial simply returns the monomial itself.
 
-#### Monomials Internally a monomial has a list of strings which are the
-generators of the algebra. The generators much match the form
-"\<letter>+\<digits>".  Using square brackets accesses the list elements as
-monomials in the usual pythonic way, in particular you can use slices to get
-'submonomials'. For example, `(x*y*z)[0:2]` is the monomial `x*y`. 
+#### Monomials 
 
-## Tensors <a name="tensors"></a> Tensors are implemented using the "Composite"
-design pattern as polynomials. Please see the section on Polynomials for a
-description of this. `pureTensor` corresponds to `monomial` and `tensor`
-corresponds to `polynomial`.
+Internally a monomial has a list of strings which are the generators of the
+algebra. The generators much match the form "\<letter>+\<digits>".  Using
+square brackets accesses the list elements as monomials in the usual pythonic
+way, in particular you can use slices to get 'submonomials'. For example,
+`(x*y*z)[0:2]` is the monomial `x*y`. 
+
+## Tensors <a name="tensors"></a> 
+
+Tensors are implemented using the "Composite" design pattern as polynomials.
+Please see the section on Polynomials for a description of this. `pureTensor`
+corresponds to `monomial` and `tensor` corresponds to `polynomial`.
 
 
-#### Pure Tensors Instances of `pureTensor` have a list called `monomials` which
-are the components of the pure tensor and a field called coefficient. Cleaning
-the pure tensor makes all monomials have coefficient one and moves their
-coefficients into the coefficient field. 
+#### Pure Tensors 
+
+Instances of `pureTensor` have a list called `monomials` which are the
+components of the pure tensor and a field called coefficient. Cleaning the pure
+tensor makes all monomials have coefficient one and moves their coefficients
+into the coefficient field. 
 
 Accessing a pure tensor using square brackets returns pure tensors with
 components corresponding to that sublist in the same way as using them on
@@ -167,27 +176,32 @@ to put a polynomial into a tensor you have to iterate through the monomials and
 create pure tensors of each etc. This is laborious and is something I am trying
 to fix. 
 
-## Algebras and Relations <a name="algebras-and-relations"></a> An algebra is
-really just a list of relations. The algebra then can be used to 'reduce' an
-polynomial so that it applies relations until no more apply. Recall that I have
-assumed the relations are ordered so that they have a leading 'out of order'
-term which can be written more 'in order'.
+## Algebras and Relations <a name="algebras-and-relations"></a> 
 
-#### Relations Relations have three fields: `leadingMonomial`, `lowerOrderTerms`
-and `coefficient`. The latter field `coefficient` is really there because of an
-unfortunate design problem with pure tensors which is to be fixed. The important
-method is `doesAct` which tests whether this relation can reduce a given
-monomial. To make this class as simple as possible this is an incredibly
+An algebra is really just a list of relations. The algebra then can be used to
+'reduce' an polynomial so that it applies relations until no more apply. Recall
+that I have assumed the relations are ordered so that they have a leading 'out
+of order' term which can be written more 'in order'.
+
+#### Relations 
+
+Relations have three fields: `leadingMonomial`, `lowerOrderTerms` and
+`coefficient`. The latter field `coefficient` is really there because of an
+unfortunate design problem with pure tensors which is to be fixed. The
+important method is `doesAct` which tests whether this relation can reduce a
+given monomial. To make this class as simple as possible this is an incredibly
 simple-minded method; the method only checks whether the polynomial you pass it
-is exactly the `leadingMonomial`.  The `algebra` defined by this relation has to
-be a bit smarter to compensate for this.
+is exactly the `leadingMonomial`.  The `algebra` defined by this relation has
+to be a bit smarter to compensate for this.
 
-#### Algebras An `algebra` has some relations which it can use to `reduce` a
-polynomial until it no longer has any "out of order" monomials. If you choose
-your relations badly this can take some time and won't terminate if you have not
-written your relations in the correct form (out of order ---> in order). The
-reduction works by testing if any relation can act on any of the monomials in a
-given polynomial, and then reduces the input using this monomial.
+#### Algebras 
+
+An `algebra` has some relations which it can use to `reduce` a polynomial until
+it no longer has any "out of order" monomials. If you choose your relations
+badly this can take some time and won't terminate if you have not written your
+relations in the correct form (out of order ---> in order). The reduction works
+by testing if any relation can act on any of the monomials in a given
+polynomial, and then reduces the input using this monomial.
 
 For most users, `reduce` will suffice. However, if one wishes to know the exact
 details of the reduction in terms of reduction functions, the methods
