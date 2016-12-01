@@ -243,8 +243,7 @@ Lemma.
 
 A `tensorAlgebra` simply allows one to `reduce` tensor products of elements of
 different algebras. If you don't want to actually reduce one of the components
-then make that the free algebra (the default constructor of an `algebra`). Note 
-that mathematically these should really be considered 
+then make that the free algebra (the default constructor of an `algebra`). 
 
 For example, the second Koszul space of an algebra A with relations R would be 
 "A | R | A". We would never want to `reduce` the middle component of any element 
